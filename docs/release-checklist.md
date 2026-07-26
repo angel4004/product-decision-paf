@@ -57,12 +57,14 @@ Record the actual result:
 
 ```text
 command: python scripts/quick_validate.py
-status: PASS on pre-publication candidate
+status: PASS on published commit
 exit_code: 0
 checks_run: 9
 eval_cases: 37
-checked_commit: PENDING FIRST COMMIT
-companion_checks: official skill validator PASS; validator unit tests 4/4 PASS
+checked_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
+companion_checks: official skill validator PASS; validator unit tests 4/4 PASS;
+  GitHub Actions matrix 4/4 PASS
+safe_output_ref: https://github.com/angel4004/product-decision-paf/actions/runs/30199709600
 ```
 
 The command establishes package integrity only. It does not prove model
@@ -82,10 +84,10 @@ git ls-files
 Record:
 
 ```text
-repository_root: C:/tmp/product-decision-paf
+repository_root: separate target checkout
 origin: angel4004/product-decision-paf
 branch: main
-working_tree: reviewed pre-publication candidate
+working_tree: clean at checked commit
 diff_check: PASS
 tracked_file_review: PASS; only target package files
 ```
@@ -177,7 +179,7 @@ Behavior execution requires an independent model or host harness:
 command: six independent fresh-context forward reviews
 status: TARGETED PASS; COMPLETE 37-CASE HARNESS NOT RUN
 model_runtime: Codex subagents; exact build not exposed
-skill_commit: pre-publication candidate
+skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
 cases_run: 6
 passed: 6
 failed: 0
@@ -204,7 +206,7 @@ Record:
 ```text
 command_or_thread_refs: five fresh standalone subagent runs
 status: PASS for required targeted scenarios
-skill_commit: pre-publication candidate
+skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
 context_leakage_check: PASS; agents received package path and bounded prompt only
 reviewer: independent Codex subagents plus primary release agent
 findings: null-base, data-base, value/solution co-test, insufficient evidence,
@@ -235,7 +237,7 @@ Record:
 command: one bounded-context Robin capability forward review
 status: TARGETED OUTPUT PASS; HOST ENFORCEMENT STILL REQUIRED
 robin_commit_or_version: not applicable to isolated capability test
-skill_commit: pre-publication candidate
+skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
 cases_run: 1
 safe_receipt_ref: current goal execution record; no private payload persisted
 ```
@@ -271,6 +273,9 @@ visibility: public
 default_branch: main
 remote_history_reviewed: yes; no heads returned and repository size was 0
 divergence_reviewed: yes; no remote history to reconcile
+published_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
+remote_readback: PASS
+ci_matrix: PASS on Windows and Ubuntu, Python 3.11 and 3.13
 ```
 
 Before publication:
@@ -289,7 +294,7 @@ claim success.
 
 | Gate | Required evidence | Current result |
 |---|---|---|
-| Package structure/frontmatter | `quick_validate.py` command, exit code, commit | `LOCAL PASS; COMMIT/CI BINDING PENDING` |
+| Package structure/frontmatter | `quick_validate.py` command, exit code, commit | `PASS ON f584cf1; CI 4/4` |
 | Reference/link integrity | Validator output | `PASS` |
 | Eval inventory | Case count and missing IDs | `PASS: 37 IDs; 12 invariant mappings` |
 | Validator failure controls | Unit tests | `PASS: 4/4` |
@@ -300,8 +305,8 @@ claim success.
 | PAF terminology/provenance | Human decision and primary-source refs | `RESOLVED AND ATTRIBUTED` |
 | Source reuse/license | Human rights/licensing decision | `ORIGINAL WORDING; PARTIAL CC BY-SA; NO PACKAGE LICENSE` |
 | External outcome | Metric/receipt with attribution | `NOT VERIFIED` |
-| Git remote/history | Git/GitHub readback | `PASS: PUBLIC EMPTY MAIN` |
-| Commit/push | Commit SHA and remote readback | `PENDING` |
+| Git remote/history | Git/GitHub readback | `PASS: INITIAL PUBLIC MAIN WAS EMPTY` |
+| Commit/push | Commit SHA and remote readback | `PUBLISHED: f584cf1; READBACK PASS` |
 
 ## Publication and readback
 
