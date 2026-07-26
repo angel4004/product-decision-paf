@@ -125,16 +125,18 @@ force_push: prohibited
 Candidate publication status:
 
 ```text
-implementation_commit: not_created_yet
-implementation_push: pending
-implementation_ci: pending
-release_evidence_commit: pending
-final_remote_readback: pending
+implementation_commit: 840f16e1cd3c3c365b2f3c297d260bd4a555af99
+implementation_push: PASS, non-force main -> origin/main
+implementation_ci: PASS, 4/4 matrix jobs
+implementation_ci_url: https://github.com/angel4004/product-decision-paf/actions/runs/30212409897
+implementation_remote_readback: PASS, API and ls-remote both returned the exact SHA; remote tree was complete and contained the required skill, intent schema, adapter, and onboarding files
+release_evidence_commit: the commit containing this record; exact SHA and its CI belong in the final handoff
+final_remote_readback: handoff gate after the release-evidence commit
 ```
 
-These are live release gates, not placeholders for a success claim. Replace
-them only with exact commit SHAs, GitHub Actions results, and remote readback
-after each operation succeeds.
+Implementation evidence is closed. The release-evidence commit still needs its
+own non-force push, exact CI run, remote readback, and clean-worktree check
+before the final handoff.
 
 ## Release gates
 
@@ -154,9 +156,10 @@ after each operation succeeds.
 | Secondary secret scanner | NOT AVAILABLE |
 | External product outcome | NOT VERIFIED |
 | Production Robin persistence adapter | HOST-REQUIRED; not runtime-tested here |
-| Implementation commit and non-force push | PENDING |
-| Cross-platform GitHub Actions matrix | PENDING |
-| Final remote commit/tree readback | PENDING |
+| Implementation commit and non-force push | PASS, `840f16e1cd3c3c365b2f3c297d260bd4a555af99` |
+| Cross-platform implementation GitHub Actions matrix | PASS, Windows/Ubuntu × Python 3.11/3.13 |
+| Implementation remote commit/tree readback | PASS |
+| Release-evidence commit, CI, and final remote readback | PENDING until this record is committed and verified |
 
 ## Publication procedure
 
