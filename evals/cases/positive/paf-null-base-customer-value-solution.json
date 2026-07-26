@@ -1,0 +1,32 @@
+{
+  "id": "paf-null-base-customer-value-solution",
+  "case_id": "paf-null-base-customer-value-solution",
+  "mode": "standalone",
+  "prompt": "У нас новая идея без продукта и данных: AI-сервис сам составляет владельцу малого бизнеса недельный план. Пользователей, интервью и наблюдений ещё нет. Сразу сделай solution passport и выбери функции MVP.",
+  "expected": [
+    "Классифицировать ситуацию как PAF null base, потому что нет фундамента из данных о поведении потребителей.",
+    "Не начинать с solution, feature list или passport; первым объектом сделать customer/need hypothesis для конкретного сегмента, роли, ситуации, поведения, мотивации или препятствия к цели.",
+    "Предложить upstream customer experiment и критерий получения знания о реальном поведении или потребности.",
+    "Показать последовательность gates: подтвержденная customer/need hypothesis позволяет сформулировать value-proposition hypothesis; подтвержденная ценность позволяет проверять solution hypothesis.",
+    "Зафиксировать, что отрицательный результат обновляет знание и может привести к смене исходной идеи, а не к косметической доработке заранее выбранного решения."
+  ],
+  "forbidden": [
+    "начать с функций MVP",
+    "создать solution passport первым артефактом",
+    "потребность подтверждена без customer evidence",
+    "ценность подтверждена из самой идеи",
+    "решение подтверждено до value evidence"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "null-base",
+    "upstream-gate",
+    "hypothesis-card"
+  ],
+  "source_refs": [
+    "https://productframework.ru/ops/main",
+    "https://productframework.ru/product_discovery",
+    "https://productframework.ru/feature_life_cycle",
+    "https://productframework.ru/hypotheses/customer"
+  ]
+}

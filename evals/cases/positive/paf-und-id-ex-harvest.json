@@ -1,0 +1,31 @@
+{
+  "id": "paf-und-id-ex-harvest",
+  "case_id": "paf-und-id-ex-harvest",
+  "mode": "standalone",
+  "prompt": "Опиши PAF-цикл для цели поднять completion интеграции с 31% до 50%. В Nexus уже есть funnel, интервью и support categories; root cause ещё не установлен. Команда хочет сразу разработать новый wizard и после релиза перейти к следующей задаче.",
+  "expected": [
+    "Начать с product goal and current Nexus context.",
+    "Understand: исследовать, что влияет на достижение цели, локализовать anomaly/bottleneck and root cause, при необходимости сформулировать и проверить upstream hypotheses.",
+    "Identify: сформировать варианты устранения подтвержденного bottleneck, проверить hypotheses, обновлять Confidence Point только по новому значимому context and update Nexus.",
+    "Execute: масштабировать подтвержденное решение и проверить достижение product goal, а не просто факт релиза.",
+    "Harvesting: подвести итог воздействия, зафиксировать NPV or relevant outcome limits and convert all new knowledge into Nexus context before the cycle repeats.",
+    "Не переходить к Execute с wizard до Understand/Identify gates."
+  ],
+  "forbidden": [
+    "Execute начинается с разработки выбранной идеи без gate",
+    "релиз равен достижению цели",
+    "после релиза не фиксировать знания",
+    "Harvesting является празднованием релиза",
+    "Confidence Point растет от количества выполненных задач"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "und-id-ex",
+    "data-base",
+    "upstream-gate"
+  ],
+  "source_refs": [
+    "https://productframework.ru/ops/main",
+    "https://productframework.ru/feature_life_cycle"
+  ]
+}

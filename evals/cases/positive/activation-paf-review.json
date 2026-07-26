@@ -1,0 +1,30 @@
+{
+  "id": "activation-paf-review",
+  "case_id": "activation-paf-review",
+  "mode": "standalone",
+  "prompt": "Проверь PAF для решения: мы хотим добавить AI-резюме звонка. Цель — сократить подготовку менеджера к follow-up, но есть только отзывы команды и прототип.",
+  "expected": [
+    "Активировать route PAF consistency и сразу выполнить compact review.",
+    "Связать product goal, artifact, user evidence и pending decision без числового PAF score.",
+    "Показать доказательства, пробелы, blocked claim, safe statement и один следующий artifact.",
+    "Пометить поведенческую часть как instruction-supported в standalone mode.",
+    "Завершить одним следующим шагом с pass/fail правилом, а не вопросом."
+  ],
+  "forbidden": [
+    "PAF score",
+    "PAF consistency proven",
+    "PAF полностью подтвержден",
+    "quality-ready"
+  ],
+  "tags": [
+    "activation-positive",
+    "paf-review",
+    "standalone-boundary"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/CONSTITUTION.md#L29-L42",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/reviews/paf-consistency-review.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-conflict-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-consistency-without-evidence-negative.yaml"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "activation-next-product-step",
+  "case_id": "activation-next-product-step",
+  "mode": "standalone",
+  "prompt": "Какой следующий продуктовый шаг? У существующего SaaS activation сейчас 18%, хотим 30% к 1 октября. Есть funnel analytics за 90 дней и 14 записей onboarding-сессий.",
+  "expected": [
+    "Активировать goal framing, а не начинать с project passport.",
+    "Показать цель, baseline, target, deadline, основной unknown и pending decision.",
+    "Маршрутизировать уже доступные funnel analytics и onboarding recordings до запроса новых данных.",
+    "Предложить один следующий validation artifact с pass/fail критерием.",
+    "Указать, какое решение станет возможным после проверки."
+  ],
+  "forbidden": [
+    "[PROJECT PASSPORT] как первый artifact",
+    "попросить пользователя повторно прислать уже указанные источники без объяснения coverage gap",
+    "гарантировать рост activation до 30%",
+    "закончить вопросом что делать дальше"
+  ],
+  "tags": [
+    "activation-positive",
+    "goal-validation",
+    "source-routing",
+    "paf-review"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/AGENTS.md#L91-L100",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/copilot-ux/goal-led-validation.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/reviews/evidence-gap-review.md#L10-L27",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/ROUTING.yaml"
+  ]
+}

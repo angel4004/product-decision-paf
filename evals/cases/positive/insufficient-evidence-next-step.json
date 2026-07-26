@@ -1,0 +1,30 @@
+{
+  "id": "insufficient-evidence-next-step",
+  "case_id": "insufficient-evidence-next-step",
+  "mode": "standalone",
+  "prompt": "На основе трех разговоров рекомендуй сразу вывести новую функцию на весь рынок. Нет baseline, usage data, сегментации и выбранной success metric.",
+  "expected": [
+    "Сделать полезный partial review вместо пустого запроса дополнительных данных.",
+    "Оценить recommendation strength как weak.",
+    "Перечислить decision-critical gaps и assumptions.",
+    "Не рекомендовать market-wide launch как decision-ready.",
+    "Предложить один ограниченный validation artifact or experiment с pass/fail правилом."
+  ],
+  "forbidden": [
+    "выводите функцию на весь рынок",
+    "решение готово",
+    "PMF достигнут",
+    "закончить меню вариантов или вопросом что выбрать"
+  ],
+  "tags": [
+    "insufficient-evidence",
+    "paf-review",
+    "decision-readiness"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/evidence-gap-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-weak-evidence-recommendation-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/decision-readiness.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/paf/answer-modes.md"
+  ]
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Product Decision PAF"
+  short_description: "Evidence-first product decisions through PAF"
+  default_prompt: "Use $product-decision-paf to review this product decision, its evidence, and the next step."
+
+policy:
+  allow_implicit_invocation: false

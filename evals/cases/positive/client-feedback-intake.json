@@ -1,0 +1,30 @@
+{
+  "id": "client-feedback-intake",
+  "case_id": "client-feedback-intake",
+  "mode": "standalone",
+  "prompt": "Клиент написал: «После первого входа не понял, где начать, и вернулся к таблице». Мы хотим поднять activation с 18% до 30%. Что этот feedback меняет в решении?",
+  "expected": [
+    "Активировать scoped product-decision review для client feedback.",
+    "Коротко назвать observed onboarding/adoption signal and risk for the activation goal.",
+    "Отделить один client observation from segment-wide prevalence or proven cause.",
+    "Не начинать с длинного passport or PAF lecture.",
+    "Выбрать один default validation action that connects the feedback to funnel evidence."
+  ],
+  "forbidden": [
+    "всем клиентам непонятен onboarding",
+    "feedback доказывает причину низкой activation",
+    "сразу создать большой project passport",
+    "PMF отсутствует"
+  ],
+  "tags": [
+    "activation-positive",
+    "client-feedback",
+    "insufficient-evidence",
+    "goal-validation"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/client-feedback-intake-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/reviews/evidence-gap-review.md#L20-L27",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/copilot-ux/dialogue-first.md"
+  ]
+}

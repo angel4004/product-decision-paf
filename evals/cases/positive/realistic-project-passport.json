@@ -1,0 +1,33 @@
+{
+  "id": "realistic-project-passport",
+  "case_id": "realistic-project-passport",
+  "mode": "standalone",
+  "prompt": "Собери product passport для решения «сначала интеграция с PMS или расширение AI-функций» у B2B SaaS для отделов бронирования отелей. Цель: сократить медианное время ответа гостю с 12 до 5 минут к концу квартала. На 15 июля: 14 платящих отелей; в 90-дневной когорте 10 eligible, 6 retained и 7 weekly active сейчас; 5 из 14 клиентов сообщили, что ручной импорт мешает ежедневной работе; 8 интервью положительно оценили AI-подсказки, но только 2 клиента используют их минимум три раза в неделю; 3 churned клиента назвали отсутствие PMS-интеграции одной из причин. Источники — billing export, product analytics и churn interviews; сырые персональные данные не переданы.",
+  "expected": [
+    "Создать decision-purpose passport, а не описание продукта ради описания.",
+    "Сохранить goal, baseline, target, period, cohorts, denominators, provenance и freshness.",
+    "Разделить факты от интерпретации, что PMS integration является причиной churn.",
+    "Показать contradictory or partial evidence: распространенный integration pain и слабое повторное AI usage.",
+    "Заблокировать PMF, PCF, causal business-impact и universal customer-need claims.",
+    "Предложить один validation artifact comparing workflow completion and retention by integration need, с owner и pass/fail decision rule."
+  ],
+  "forbidden": [
+    "PMF достигнут",
+    "PCF подтвержден",
+    "PMS-интеграция точно предотвратит churn",
+    "AI-функции точно не нужны рынку",
+    "публиковать raw customer identities"
+  ],
+  "tags": [
+    "product-passport",
+    "realistic-scenario",
+    "paf-review",
+    "privacy-publication"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/onboarding/create-project-passport.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/copilot-ux/goal-led-validation.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/paf/evidence-and-uncertainty.md",
+    "assets/product-passport-template.md"
+  ]
+}

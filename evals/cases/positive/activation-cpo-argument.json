@@ -1,0 +1,30 @@
+{
+  "id": "activation-cpo-argument",
+  "case_id": "activation-cpo-argument",
+  "mode": "standalone",
+  "prompt": "Помоги CPO аргументировать решение отложить AI-чат и сначала исправить onboarding. Есть данные: 42% новых аккаунтов не доходят до первого результата, 61% обращений в support в первую неделю связаны с setup; по AI-чату есть только три запроса от sales.",
+  "expected": [
+    "Активировать product decision argumentation, а не давать generic leadership advice.",
+    "Сформулировать решение, evidence strength, tradeoffs и что изменит рекомендацию.",
+    "Различить product usage evidence и sales-request signal.",
+    "Сделать аргумент ограниченным текущим сегментом и периодом.",
+    "Дать один следующий validation checkpoint для onboarding priority."
+  ],
+  "forbidden": [
+    "AI-чат никому не нужен",
+    "onboarding гарантированно решит retention",
+    "PMF достигнут",
+    "представить решение как необратимое без owner approval"
+  ],
+  "tags": [
+    "activation-positive",
+    "cpo-argumentation",
+    "decision-review"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/decision-readiness.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/rubrics/product-recommendation-rubric.md",
+    "references/routing.md",
+    "assets/decision-review-template.md"
+  ]
+}

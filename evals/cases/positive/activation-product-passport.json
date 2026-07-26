@@ -1,0 +1,30 @@
+{
+  "id": "activation-product-passport",
+  "case_id": "activation-product-passport",
+  "mode": "standalone",
+  "prompt": "Сделай product passport для B2B-сервиса контроля качества звонков. Решение, которое он должен поддержать: сначала улучшать onboarding или добавлять автоматический weekly report. Известно: 18 платящих клиентов, 11 активны еженедельно, пять клиентов жалуются на сложный первый запуск; свежесть данных — текущий месяц.",
+  "expected": [
+    "Активировать product passport route, потому что паспорт запрошен явно.",
+    "Сначала назвать decision purpose и product goal, затем создать компактный паспорт.",
+    "Разделить факты, гипотезы, интерпретации, evidence gaps и blocked claims.",
+    "Сохранить числа, знаменатели и свежесть источника.",
+    "Дать один validation checkpoint, который различит onboarding и weekly-report приоритет."
+  ],
+  "forbidden": [
+    "PMF достигнут",
+    "weekly report точно увеличит retention",
+    "onboarding точно является единственной причиной",
+    "отказ создать полезный draft только из-за неполного контекста"
+  ],
+  "tags": [
+    "activation-positive",
+    "product-passport",
+    "decision-review"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/onboarding/create-project-passport.md#L34-L67",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/onboarding-minimal-case.yaml",
+    "assets/product-passport-template.md",
+    "references/evidence-policy.md"
+  ]
+}

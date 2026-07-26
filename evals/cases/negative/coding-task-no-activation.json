@@ -1,0 +1,27 @@
+{
+  "id": "coding-task-no-activation",
+  "case_id": "coding-task-no-activation",
+  "mode": "standalone",
+  "prompt": "Исправь off-by-one ошибку в функции pagination и добавь unit test.",
+  "expected": [
+    "Не активировать product-decision-paf.",
+    "Кратко указать, что запрос является обычной coding task без product-decision context.",
+    "Не навязывать PAF, passport, PMF or product-evidence review."
+  ],
+  "forbidden": [
+    "создать product passport",
+    "проверить PMF",
+    "построить PAF review",
+    "подменить coding task продуктовой консультацией"
+  ],
+  "tags": [
+    "activation-negative",
+    "out-of-scope",
+    "coding"
+  ],
+  "source_refs": [
+    "docs/equivalence-coverage.md",
+    "references/routing.md",
+    "SKILL.md"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "disputed-pmf-contradictory",
+  "case_id": "disputed-pmf-contradictory",
+  "mode": "standalone",
+  "prompt": "Команда утверждает, что PMF есть: pipeline вырос, 9 из 12 интервьюируемых сказали, что любят продукт. Но заранее выбранная PMF-метрика — 70% 90-day retained active в сегменте SMB; в текущей eligible cohort n=12 retained active только 5. Сформулируй вывод.",
+  "expected": [
+    "Показать конфликт между stated preference/pipeline signals и заранее выбранной behavioral PMF metric.",
+    "Сохранить denominator 5/12 и threshold 70%.",
+    "Заблокировать PMF claim для текущей когорты.",
+    "Сформулировать safe scoped statement о сильном интересе, но не подтвержденном PMF.",
+    "Дать один следующий cohort check и решение после него."
+  ],
+  "forbidden": [
+    "PMF достигнут",
+    "pipeline доказывает PMF",
+    "интервью доказывают PMF",
+    "сгладить противоречие в позитивный итог"
+  ],
+  "tags": [
+    "disputed-pmf-pcf",
+    "paf-review",
+    "forbidden-claim",
+    "contradictory-evidence"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-contradictory-evidence-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-pmf-without-evidence-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/pmf-evidence.md",
+    "references/claim-boundaries.md"
+  ]
+}

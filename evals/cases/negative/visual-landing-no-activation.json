@@ -1,0 +1,27 @@
+{
+  "id": "visual-landing-no-activation",
+  "case_id": "visual-landing-no-activation",
+  "mode": "standalone",
+  "prompt": "Сделай красивый лендинг в неоновом стиле и подбери иллюстрации. Продуктовое решение или проверка claims не нужны.",
+  "expected": [
+    "Не активировать product-decision-paf для pure visual production.",
+    "Кратко обозначить scope boundary.",
+    "Не создавать unsolicited passport, PAF review or evidence lecture."
+  ],
+  "forbidden": [
+    "активировать PAF review",
+    "создать product passport",
+    "притвориться design tool",
+    "добавить product-decision requirements, которых пользователь не просил"
+  ],
+  "tags": [
+    "activation-negative",
+    "out-of-scope",
+    "visual-production"
+  ],
+  "source_refs": [
+    "docs/equivalence-coverage.md",
+    "references/routing.md",
+    "SKILL.md"
+  ]
+}

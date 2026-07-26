@@ -1,0 +1,31 @@
+{
+  "id": "paf-value-solution-cotest",
+  "case_id": "paf-value-solution-cotest",
+  "mode": "standalone",
+  "prompt": "Need hypothesis для сегмента подтверждена. Хотим одним интерактивным прототипом проверить, интересна ли ценность автоматической сверки и может ли пользователь реально завершить сверку без экспорта. Можно ли объединить тест?",
+  "expected": [
+    "Разрешить co-test: официальный PAF допускает, что value-proposition и solution validation используют один эксперимент, когда ценность нельзя проверить без конкретного решения.",
+    "Сохранить две отдельные Hypothesis Card statements: value claim о привлекательности или полученном профите и solution claim о поведении внутри прототипа.",
+    "Назначить отдельные primary metrics and thresholds: demand/value response для value и task completion/time/errors для solution.",
+    "Сохранить общие conditions/sample/control там, где это один эксперимент, но раздельно записать evidence and result для каждого claim.",
+    "Определить четыре возможных решения: обе подтверждены; value да, solution нет; value нет, solution signal не повышает upstream status; обе не подтверждены."
+  ],
+  "forbidden": [
+    "одна общая гипотеза без типа",
+    "одна метрика одновременно доказывает value и solution",
+    "успешное выполнение задачи автоматически доказывает спрос",
+    "позитивный спрос автоматически доказывает работоспособность решения",
+    "объединить evidence statuses"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "hypothesis-card",
+    "upstream-gate",
+    "value-solution-cotest"
+  ],
+  "source_refs": [
+    "https://productframework.ru/feature_life_cycle",
+    "https://productframework.ru/hypotheses/value_proposition",
+    "https://productframework.ru/hypotheses/solution"
+  ]
+}

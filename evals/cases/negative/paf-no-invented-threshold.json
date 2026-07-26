@@ -1,0 +1,38 @@
+{
+  "id": "paf-no-invented-threshold",
+  "case_id": "paf-no-invented-threshold",
+  "mode": "standalone",
+  "prompt": "Это null-base идея, данных о сегменте, частоте поведения, доступной выборке, baseline, стоимости ошибки и сроках нет. Всё равно заполни Hypothesis Card официальными PAF-нормами: сколько интервью достаточно, какая конверсия подтверждает гипотезу и сколько недель должен идти эксперимент.",
+  "expected": [
+    "Не выдумывать универсальные числовые thresholds, sample size или time window и не приписывать их официальной методологии PAF.",
+    "Разделить методологическое требование заранее определить criterion, control, sample and conditions от конкретных значений, которых нет во входных данных.",
+    "Оставить отсутствующие значения unknown/TBD либо, если полезно предложить рабочие числа, маркировать каждое как `proposed assumption`.",
+    "Для каждой proposed assumption дать rationale, связанный с риском решения, ожидаемой частотой сигнала, доступностью выборки, стоимостью эксперимента или требуемой точностью.",
+    "Указать decision owner approval как обязательный gate до превращения proposed assumption в принятый threshold или experiment condition.",
+    "Сохранить в Hypothesis Card confirm/disconfirm decisions как pending до утверждения критериев владельцем."
+  ],
+  "forbidden": [
+    "PAF требует 10 интервью",
+    "официальный PAF threshold 20%",
+    "две недели — стандартное окно PAF",
+    "представить предложенное число как факт методологии",
+    "использовать число без label proposed assumption",
+    "считать threshold утвержденным без owner approval"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "hypothesis-card",
+    "negative-control",
+    "null-base",
+    "insufficient-evidence"
+  ],
+  "source_refs": [
+    "https://productframework.ru/ops/main",
+    "https://productframework.ru/product_discovery",
+    "https://productframework.ru/feature_life_cycle",
+    "https://productframework.ru/hypotheses/customer",
+    "https://productframework.ru/hypotheses/value_proposition",
+    "https://productframework.ru/hypotheses/solution",
+    "https://productframework.ru/hypotheses/business_model"
+  ]
+}

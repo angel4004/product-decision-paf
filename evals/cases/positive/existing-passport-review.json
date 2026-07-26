@@ -1,0 +1,29 @@
+{
+  "id": "existing-passport-review",
+  "case_id": "existing-passport-review",
+  "mode": "standalone",
+  "prompt": "Проверь существующий product passport. Decision: запускать ли self-serve onboarding. Facts: 30 платящих B2B-клиентов; 17 из 30 завершили setup без помощи за последние 60 дней. Claim в паспорте: «self-serve готов к масштабированию, потому что большинство клиентов справились». Assumptions: сегменты и сложность setup одинаковы. Evidence gaps: причины 13 незавершенных setup и support load не исследованы.",
+  "expected": [
+    "Сразу выполнить review, потому что artifact content уже дан, и не просить повторно прислать ref.",
+    "Отделить strong sections, weak claims, assumptions and missing evidence.",
+    "Показать denominator 17/30, period and unknown segment differences.",
+    "Заблокировать readiness claim без failure analysis, support cost and segment coverage.",
+    "Дать один prioritized hardening action with pass/fail decision rule."
+  ],
+  "forbidden": [
+    "попросить сначала прислать passport",
+    "self-serve готов к масштабированию",
+    "большинство автоматически доказывает readiness",
+    "создать новый passport вместо review существующего"
+  ],
+  "tags": [
+    "product-passport",
+    "paf-review",
+    "artifact-review"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/existing-passport-review-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/onboarding/review-existing-passport.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/decision-readiness.md"
+  ]
+}

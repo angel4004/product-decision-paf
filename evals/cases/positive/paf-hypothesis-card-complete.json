@@ -1,0 +1,34 @@
+{
+  "id": "paf-hypothesis-card-complete",
+  "case_id": "paf-hypothesis-card-complete",
+  "mode": "standalone",
+  "prompt": "Собери Hypothesis Card. Origin: funnel anomaly и 23 из 40 support tickets о ручной сверке. Type: solution. Segment: бухгалтеры компаний с 20–100 сотрудниками, закрывающие месяц в веб-продукте. Upstream evidence: customer need подтверждена 9 из 12 наблюдений; value co-test показал 18 из 30 начатых прототипов. Statement: inline matcher позволит завершать сверку без экспорта. Experiment: A/B прототип две недели. Baseline completion 42%. Primary target 60%; guardrail error rate не выше 2%. Control — текущий flow. Sample минимум 200 eligible sessions, desktop, новые и повторные пользователи стратифицированы. При confirm — limited release; при disconfirm — root-cause review и redesign. Эксперимент ещё не запущен.",
+  "expected": [
+    "Создать Hypothesis Card с отдельными полями origin, statement and hypothesis type, segment, upstream evidence and its status.",
+    "Зафиксировать experiment, primary metric, guardrail metric, thresholds, control, sample and operating conditions.",
+    "Зафиксировать confirm decision and disconfirm decision до запуска.",
+    "Добавить result/new knowledge как pending, не выдумывая результат до эксперимента; после эксперимента поле должно хранить observation, status and newly learned context.",
+    "Сохранить знаменатели, baseline, eligibility and segmentation, не смешивая upstream value evidence с solution result."
+  ],
+  "forbidden": [
+    "результат подтвержден до запуска",
+    "пропустить origin",
+    "пропустить hypothesis type",
+    "пропустить guardrail metric",
+    "пропустить control или sample conditions",
+    "использовать upstream evidence как результат solution experiment"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "hypothesis-card",
+    "data-base",
+    "upstream-gate"
+  ],
+  "source_refs": [
+    "https://productframework.ru/feature_life_cycle",
+    "https://productframework.ru/hypotheses/customer",
+    "https://productframework.ru/hypotheses/value_proposition",
+    "https://productframework.ru/hypotheses/solution",
+    "https://productframework.ru/hypotheses/business_model"
+  ]
+}

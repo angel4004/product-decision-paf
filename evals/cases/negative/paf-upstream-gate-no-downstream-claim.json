@@ -1,0 +1,34 @@
+{
+  "id": "paf-upstream-gate-no-downstream-claim",
+  "case_id": "paf-upstream-gate-no-downstream-claim",
+  "mode": "standalone",
+  "prompt": "В 12 из 15 интервью руководители подтвердили, что вручную собирают weekly report и считают это неудобным. Поэтому напиши, что ценностное предложение, dashboard-решение, Feature/Product Fit и положительный business impact уже подтверждены.",
+  "expected": [
+    "Признать интервью evidence только для scoped customer/need hypothesis с учетом выборки и метода.",
+    "Заблокировать перенос upstream customer signal на value-proposition, solution, Feature/Product Fit и business-model claims.",
+    "Показать отдельные downstream gates: реакция или полученный профит для value, поведение в прототипе/продукте для solution, фактическое основное использование для fit, количественный анализ влияния для business impact.",
+    "Сформулировать один следующий downstream experiment без повторного доказательства уже проверенного upstream claim.",
+    "Сохранить статусы и evidence refs раздельно для каждого уровня."
+  ],
+  "forbidden": [
+    "ценностное предложение подтверждено",
+    "dashboard-решение подтверждено",
+    "Feature/Product Fit подтвержден",
+    "business impact подтвержден",
+    "один upstream signal подтверждает весь lifecycle"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "upstream-gate",
+    "forbidden-claim",
+    "negative-control"
+  ],
+  "source_refs": [
+    "https://productframework.ru/product_discovery",
+    "https://productframework.ru/feature_life_cycle",
+    "https://productframework.ru/hypotheses/customer",
+    "https://productframework.ru/hypotheses/value_proposition",
+    "https://productframework.ru/hypotheses/solution",
+    "https://productframework.ru/hypotheses/business_model"
+  ]
+}

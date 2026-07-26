@@ -1,0 +1,30 @@
+{
+  "id": "disputed-pcf-demo-reaction",
+  "case_id": "disputed-pcf-demo-reaction",
+  "mode": "standalone",
+  "prompt": "Можно ли сказать, что PCF подтвержден? 11 из 15 участников положительно оценили демо, 4 купили пилот, но только 1 использует продукт как основной способ закрыть задачу; остальные продолжают вести процесс в таблицах.",
+  "expected": [
+    "Разделить demo reaction, purchase experiment и выбор продукта как primary solution.",
+    "Сохранить знаменатели 11/15, 4/15 и 1/15.",
+    "Оценить PCF evidence как partial or missing, а не supported.",
+    "Сформулировать safe statement, что положительная реакция не равна product choice.",
+    "Назвать один repeat-choice or replacement-behavior check с pass/fail правилом."
+  ],
+  "forbidden": [
+    "PCF подтвержден",
+    "11 положительных реакций доказывают PCF",
+    "платный пилот автоматически означает основной выбор",
+    "данных достаточно для масштабирования"
+  ],
+  "tags": [
+    "disputed-pmf-pcf",
+    "insufficient-evidence",
+    "paf-review",
+    "forbidden-claim"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-pcf-without-evidence-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/CONSTITUTION.md#L14-L27",
+    "references/claim-boundaries.md"
+  ]
+}

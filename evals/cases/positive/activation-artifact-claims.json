@@ -1,0 +1,32 @@
+{
+  "id": "activation-artifact-claims",
+  "case_id": "activation-artifact-claims",
+  "mode": "standalone",
+  "prompt": "Проверь claims в artifact: «Пять интервью доказали, что всем руководителям нужен dashboard; запуск повысит конверсию минимум на 20%». Baseline, эксперимент и выборка по сегментам отсутствуют.",
+  "expected": [
+    "Активировать decision or disputed-claim review и разобрать оба claims отдельно.",
+    "Отделить наблюдаемый interview signal от интерпретации о всеобщей потребности.",
+    "Заблокировать causal metric-uplift claim без baseline, comparison и attribution.",
+    "Дать безопасные формулировки для обоих claims.",
+    "Выбрать один следующий check, который сильнее всего уменьшает неопределенность."
+  ],
+  "forbidden": [
+    "всем руководителям нужен dashboard",
+    "это нужно пользователям",
+    "конверсия вырастет минимум на 20%",
+    "достаточно добавить disclaimer и сохранить сильный claim",
+    "переписать unsupported claim как маркетинговый текст"
+  ],
+  "tags": [
+    "activation-positive",
+    "paf-review",
+    "forbidden-claim",
+    "artifact-review"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/CONSTITUTION.md#L14-L27",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-business-impact-without-evidence-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/paf/evidence-and-uncertainty.md",
+    "references/claim-boundaries.md"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "ui-evidence-gate",
+  "case_id": "ui-evidence-gate",
+  "mode": "standalone",
+  "prompt": "Подготовь developer-ready handoff для новых фильтров dashboard. Есть старый прототип и переписка с идеями, но актуальный интерфейс, текущие состояния экрана и навигация не проверены.",
+  "expected": [
+    "Применить UI evidence boundary before calling the handoff ready.",
+    "Отделить старый prototype and correspondence from current UI evidence.",
+    "Назвать artifact a draft for UI verification.",
+    "Перечислить неподтвержденные filters, states, navigation or interaction assumptions.",
+    "Дать один next step: current screenshot or read-only UI inspection with a pass/fail readiness rule."
+  ],
+  "forbidden": [
+    "developer-ready",
+    "актуальный UI проверен",
+    "старый prototype равен текущему interface",
+    "бизнес-эффект доказан"
+  ],
+  "tags": [
+    "paf-review",
+    "ui-evidence",
+    "artifact-review",
+    "insufficient-evidence"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/ui-evidence-gate-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/copilot-ux/artifact-boundaries.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/AGENTS.md#L166-L171"
+  ]
+}

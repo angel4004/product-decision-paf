@@ -1,0 +1,30 @@
+{
+  "id": "scoped-pmf-evidence",
+  "case_id": "scoped-pmf-evidence",
+  "mode": "standalone",
+  "prompt": "До эксперимента команда определила критерий для target segment: минимум 70% 90-day retained active при eligible n>=50 и не менее 50% paid conversion. За последние три сопоставимые когорты eligible n=64, retained active=48, paid=39; period и segment зафиксированы, exclusions=4 тестовых аккаунта уже исключены. Что можно утверждать?",
+  "expected": [
+    "Сохранить metric definition, threshold, numerator, denominator, period, segment and exclusions.",
+    "Показать, что 48/64 и 39/64 проходят заранее заданные продуктовые критерии.",
+    "Разрешить scoped claim, что evidence meets the team's defined criterion for this segment and period.",
+    "Не превращать scoped criterion в универсальную или вечную истину о PMF.",
+    "Назвать remaining uncertainty and one monitoring checkpoint."
+  ],
+  "forbidden": [
+    "PMF доказан навсегда",
+    "PMF подтвержден для всего рынка",
+    "любые 70% автоматически доказывают PMF",
+    "игнорировать exclusions или denominators"
+  ],
+  "tags": [
+    "disputed-pmf-pcf",
+    "paf-review",
+    "evidence-supported"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/CONSTITUTION.md#L14-L27",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/pmf-evidence.md",
+    "references/evidence-policy.md",
+    "references/claim-boundaries.md"
+  ]
+}

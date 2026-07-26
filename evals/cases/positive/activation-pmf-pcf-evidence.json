@@ -1,0 +1,31 @@
+{
+  "id": "activation-pmf-pcf-evidence",
+  "case_id": "activation-pmf-pcf-evidence",
+  "mode": "standalone",
+  "prompt": "Есть ли тут PMF/PCF evidence? Из 20 компаний 12 согласились на пилот после демо, 4 оплатили, но только 2 используют продукт еженедельно; период наблюдения — шесть недель.",
+  "expected": [
+    "Активировать disputed-claim review.",
+    "Сохранить знаменатели, период и различие между интересом, оплатой, выбором продукта и повторным использованием.",
+    "Оценить PMF и PCF evidence отдельно.",
+    "Сформулировать безопасный scoped status вместо бинарного verdict.",
+    "Назвать один следующий cohort or choice check с заранее заданным pass/fail критерием."
+  ],
+  "forbidden": [
+    "PMF достигнут",
+    "PCF подтвержден",
+    "12 пилотов доказывают product-market fit",
+    "позитивная реакция на демо доказывает выбор продукта"
+  ],
+  "tags": [
+    "activation-positive",
+    "disputed-pmf-pcf",
+    "paf-review",
+    "insufficient-evidence"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/product-thinking/pmf-evidence.md",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-pmf-without-evidence-negative.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/paf-pcf-without-evidence-negative.yaml",
+    "references/claim-boundaries.md"
+  ]
+}

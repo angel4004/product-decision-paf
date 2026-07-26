@@ -1,0 +1,31 @@
+{
+  "id": "activation-product-hypothesis",
+  "case_id": "activation-product-hypothesis",
+  "mode": "standalone",
+  "prompt": "Проверь продуктовую гипотезу: владельцы небольших отелей будут ежедневно использовать AI-подсказки для ответа на входящие запросы. Пока есть пять интервью и два ручных пилота.",
+  "expected": [
+    "Активировать skill как product decision review без показа внутреннего меню маршрутов.",
+    "Сформулировать цель и решение, для которого проверяется гипотеза.",
+    "Разделить факты, гипотезу и недостающие поведенческие доказательства.",
+    "Оценить evidence как partial или missing, а не как подтверждение спроса.",
+    "Дать один следующий validation step с pass/fail критерием."
+  ],
+  "forbidden": [
+    "PMF достигнут",
+    "пользователям это точно нужно",
+    "сразу масштабируйте продукт",
+    "предложить несколько равноправных следующих шагов вместо одного default action"
+  ],
+  "tags": [
+    "activation-positive",
+    "product-hypothesis",
+    "paf-review",
+    "insufficient-evidence"
+  ],
+  "source_refs": [
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/AGENTS.md#L45-L66",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/workflows/activation/activate-cpo-copilot.md#L81-L87",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/evals/behavior/evidence-gap-case.yaml",
+    "https://github.com/angel4004/cpo-codex-copilot/blob/bb67e75a2c561c6aa90c779a9c5429b7b8383e2f/practices/paf/evidence-and-uncertainty.md"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "paf-hypothesis-type-classification",
+  "case_id": "paf-hypothesis-type-classification",
+  "mode": "standalone",
+  "prompt": "Классифицируй четыре утверждения по PAF. A: «Когда бухгалтер закрывает месяц, он вручную сверяет выгрузки, потому что не доверяет автоматическому сопоставлению». B: «Автоматическая сверка будет интересна бухгалтерам и сэкономит им не менее двух часов за закрытие». C: «Если показать сопоставление прямо в журнале операций, не менее 60% пользователей завершат сверку без экспорта». D: «При CAC не выше 30 000 рублей, gross margin не ниже 75% и 12-month retention не ниже 70% модель окупается за девять месяцев».",
+  "expected": [
+    "Классифицировать A как customer hypothesis о поведении, ситуации и мотивации потребительского сегмента.",
+    "Классифицировать B как value-proposition hypothesis о привлекательности и ожидаемом профите для сегмента.",
+    "Классифицировать C как solution hypothesis о поведении внутри конкретного решения и измеримом результате.",
+    "Классифицировать D как business-model hypothesis: математическую конфигурацию product/business metrics для масштабируемости или целей компании.",
+    "Для каждого типа назвать отдельный объект проверки и не использовать evidence одного типа как автоматическое подтверждение другого."
+  ],
+  "forbidden": [
+    "назвать все четыре product hypotheses без различий",
+    "классифицировать A как solution hypothesis",
+    "классифицировать C как customer hypothesis",
+    "считать Business Model Canvas достаточной формой D",
+    "перенести подтверждение одного типа на остальные"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "hypothesis-classification",
+    "upstream-gate"
+  ],
+  "source_refs": [
+    "https://productframework.ru/hypotheses/customer",
+    "https://productframework.ru/hypotheses/value_proposition",
+    "https://productframework.ru/hypotheses/solution",
+    "https://productframework.ru/hypotheses/business_model"
+  ]
+}

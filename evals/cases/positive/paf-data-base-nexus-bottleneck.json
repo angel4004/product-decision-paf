@@ -1,0 +1,30 @@
+{
+  "id": "paf-data-base-nexus-bottleneck",
+  "case_id": "paf-data-base-nexus-bottleneck",
+  "mode": "standalone",
+  "prompt": "У действующего B2B-продукта 8 000 monthly active users. В Nexus есть funnel за 90 дней: 72% начинают настройку интеграции, 31% завершают её, а среди завершивших 68% доходят до первого результата. Команда предлагает добавить AI-чат. Какую гипотезу проверять первой?",
+  "expected": [
+    "Классифицировать ситуацию как PAF data base: у продукта уже есть текущий контекст и поведенческие данные.",
+    "Начать с Nexus/current behavior: определить объект управления, естественное и целевое поведение, а также свежесть и границы funnel.",
+    "Выделить аномалию между стартом и завершением интеграции и сначала провести root-cause analysis этого bottleneck.",
+    "Не принимать AI-чат как исходную solution hypothesis, пока не установлена причина наблюдаемого отклонения.",
+    "Сформулировать следующий Understand artifact or experiment, который даст знание для Identify stage."
+  ],
+  "forbidden": [
+    "начать с проектирования AI-чата",
+    "AI-чат устранит bottleneck",
+    "игнорировать данные Nexus",
+    "перейти к Execute до root-cause evidence",
+    "считать корреляцию причинным объяснением"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "data-base",
+    "und-id-ex",
+    "upstream-gate"
+  ],
+  "source_refs": [
+    "https://productframework.ru/ops/main",
+    "https://productframework.ru/feature_life_cycle"
+  ]
+}

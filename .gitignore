@@ -1,0 +1,53 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Build and evaluation output
+build/
+dist/
+*.egg-info/
+evals/results/
+coverage/
+
+# Local host state and private runtime artifacts
+.codex/
+.agents/
+memory/local/
+traces/local/
+traces/state/
+traces/reports/
+receipts/
+generated/
+artifacts/private/
+
+# Credentials and secret sources
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.session
+*.session-journal
+credentials.json
+secrets.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# Editor and operating-system metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
