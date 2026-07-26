@@ -230,7 +230,7 @@ The eval suite covers:
 - privacy and publication boundaries.
 
 Eval cases are behavioral test inputs and expected outcomes. Their presence is
-not evidence that a particular model passed them. This migration ran six
+not evidence that a particular model passed them. This migration ran seven
 targeted fresh-context reviews, but not the complete 37-case host harness.
 Therefore model behavior remains `instruction-supported`; a
 behavior-verified release would additionally require the full host run, failure

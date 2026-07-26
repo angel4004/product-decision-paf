@@ -176,12 +176,12 @@ missing_case_ids: none
 Behavior execution requires an independent model or host harness:
 
 ```text
-command: six independent fresh-context forward reviews
+command: seven independent fresh-context forward reviews
 status: TARGETED PASS; COMPLETE 37-CASE HARNESS NOT RUN
 model_runtime: Codex subagents; exact build not exposed
 skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-cases_run: 6
-passed: 6
+cases_run: 7
+passed: 7
 failed: 0
 blocked: 0
 safe_report_ref: current goal execution record; no raw private input persisted
@@ -298,7 +298,7 @@ claim success.
 | Reference/link integrity | Validator output | `PASS` |
 | Eval inventory | Case count and missing IDs | `PASS: 37 IDs; 12 invariant mappings` |
 | Validator failure controls | Unit tests | `PASS: 4/4` |
-| Behavior evals | Harness, runtime, commit, case report | `6 TARGETED PASS; FULL HARNESS NOT RUN` |
+| Behavior evals | Harness, runtime, commit, case report | `7 TARGETED PASS; FULL HARNESS NOT RUN` |
 | Standalone forward test | Fresh-context refs and reviewer | `PASS: 5 TARGETED SCENARIOS` |
 | Robin embedded mode | Host receipt | `OUTPUT PASS; HOST ENFORCEMENT REQUIRED` |
 | Secret/privacy scan | Exact scanner commands and safe summary | `BUILT-IN PASS; SECONDARY NOT AVAILABLE` |
