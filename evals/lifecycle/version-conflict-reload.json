@@ -1,0 +1,53 @@
+{
+  "id": "version-conflict-reload",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-conflict",
+  "turns": [
+    {
+      "turn_id": "conflict",
+      "fresh_context": true,
+      "input": "Commit proposal based on workspace revision 4; adapter observes revision 5.",
+      "host_state": {
+        "expected_workspace_revision": 4,
+        "observed_workspace_revision": 5,
+        "receipt_status": "conflict"
+      },
+      "expected": [
+        "Do not overwrite or merge automatically.",
+        "Request bounded reload of revision 5."
+      ],
+      "forbidden": [
+        "force apply",
+        "discard concurrent evidence"
+      ]
+    },
+    {
+      "turn_id": "reload-and-reason",
+      "fresh_context": true,
+      "input": "Host supplies revision 5, its accepted receipt, and the concurrent evidence.",
+      "host_state": {
+        "workspace_revision": 5,
+        "hypothesis_revision": 2,
+        "receipt_status": "accepted",
+        "state_hash_match": true
+      },
+      "expected": [
+        "Re-evaluate the hypothesis using the concurrent evidence.",
+        "Prepare a new candidate workspace revision 6."
+      ],
+      "forbidden": [
+        "reuse the stale revision-4 conclusion unchanged",
+        "claim revision 6 persisted"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Optimistic concurrency fails closed.",
+    "Conflict recovery starts from the latest accepted state."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-change-set.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

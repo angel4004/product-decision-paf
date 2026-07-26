@@ -35,8 +35,10 @@ See [`NOTICE.md`](../NOTICE.md) for attribution and the CC BY-SA 4.0 boundary.
 PAF starts product development from a goal and the current context, not from a
 requested artifact or an ungrounded feature list. A **Nexus** is the maintained
 information model of the product, business, and market that supplies sufficient
-decision context. Compare the current state with the target, identify the gap,
-and state which uncertainty blocks the goal.
+decision context. It is a domain/content model, not a storage engine: a local
+bundle, Robin, or another host may persist the same Nexus entries. Compare the
+current state with the target, identify the gap, and state which uncertainty
+blocks the goal.
 
 A hypothesis is useful only when its resolution can update the Nexus or change
 a decision about that gap. Record the goal, object of change, target condition,
@@ -87,19 +89,34 @@ checks whether the released change advanced the product or business goal.
 
 ## 5. Enforce upstream dependency
 
-Default dependency:
+Default null-base knowledge dependency:
 
-`customer/need → value proposition → solution → business model and impact`
+`customer/need → value proposition → solution`
 
 A downstream result cannot silently repair a missing upstream link. For
 example, prototype usage may support a solution claim but does not by itself
 prove that the underlying need is important or that the business model scales.
 
-PAF explicitly allows an important practical exception: value proposition and
-solution validation may be the **same experiment** when users need a concrete
-solution to experience the value. Co-test them, but keep two hypotheses, two
-success criteria, and two conclusions. Evidence may resolve one and leave the
-other open.
+Business-model hypotheses are linked system-level hypotheses, not a fifth
+mandatory stage after solution. They may be modeled earlier and a solution soft
+launch may co-test the solution and business model. PAF also allows value
+proposition and solution validation in the **same experiment** when users need
+a concrete solution to experience the value. In either co-test, keep separate
+hypothesis IDs, approved test contracts, metric results, evidence conclusions,
+and verdicts. Bind the shared run through an explicit co-test plan and common
+execution evidence. Shared evidence may resolve and close one hypothesis while
+the other remains open for review.
+
+For longitudinal use, upstream support must remain current. A historical
+confirmed hypothesis does not authorize a downstream claim after its evidence
+or Nexus learning was superseded. Cite current unsuperseded supported evidence
+and a current supported Nexus entry descended from the upstream learning.
+
+Measured impact is not another hypothesis class in this chain. It is an
+external outcome checked after execution against the declared product or
+business goal. The terminal card preserves only the outcome snapshot available
+at closure; later post-release assertions belong in the append-only
+`outcome_log`.
 
 ## 6. Use one Hypothesis Card per tested hypothesis
 
@@ -132,6 +149,10 @@ Normalize the card outcome as:
   to reject or revise the hypothesis;
 - **new knowledge / unresolved** — the work changed the Nexus but cannot decide
   the hypothesis because evidence is partial, contradictory, or invalid.
+
+In longitudinal state, preserve that learning as typed, evidence-bound Nexus
+entries and reference the entries from `result.new_nexus_entry_ids`. Do not
+create a second untyped journal of conclusions.
 
 The labels above operationalize PAF's confirmation/refutation plans and its
 requirement to preserve new knowledge; they are not presented as an official

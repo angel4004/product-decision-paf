@@ -1,0 +1,31 @@
+{
+  "id": "paf-solution-business-model-cotest",
+  "case_id": "paf-solution-business-model-cotest",
+  "mode": "standalone",
+  "prompt": "Need и value подтверждены. Хотим сделать ограниченный soft launch: проверить, выполняют ли пользователи ключевую задачу в solution и сходится ли платная модель на этом же запуске. Обязательно ли сначала полностью подтвердить solution, а business_model тестировать только потом?",
+  "expected": [
+    "Не навязывать business_model как обязательную следующую линейную стадию после полностью готового solution.",
+    "Разрешить одному soft launch совместно тестировать solution и связанную business_model hypothesis.",
+    "Сохранить две отдельные Hypothesis Card records с разными hypothesis IDs, statements, primary criteria, evidence conclusions и verdicts.",
+    "Для solution проверять достижение пользовательского результата; для business_model проверять объявленные продуктово-бизнесовые ограничения или метрики.",
+    "Отделить последующий measured impact от обоих hypothesis verdicts и требовать host evidence для external outcome."
+  ],
+  "forbidden": [
+    "business_model — пятая обязательная стадия после solution",
+    "одна общая гипотеза без раздельных критериев",
+    "успешный task completion автоматически доказывает экономику",
+    "платёж автоматически доказывает качество solution",
+    "soft launch автоматически доказывает product impact"
+  ],
+  "tags": [
+    "paf-hypothesis-method",
+    "hypothesis-card",
+    "solution-business-model-cotest",
+    "external-outcome"
+  ],
+  "source_refs": [
+    "https://productframework.ru/hypotheses/solution",
+    "https://productframework.ru/hypotheses/business_model",
+    "references/paf-hypothesis-method.md"
+  ]
+}

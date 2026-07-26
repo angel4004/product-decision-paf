@@ -1,0 +1,85 @@
+{
+  "id": "post-release-outcome-continuation",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-outcome",
+  "turns": [
+    {
+      "turn_id": "close-test-verdict",
+      "fresh_context": true,
+      "input": "Close the reviewed test with a terminal verdict. No post-release outcome has been observed yet.",
+      "host_state": {
+        "workspace_revision": 4,
+        "hypothesis_revision": 3,
+        "receipt_status": "accepted",
+        "verdict": "unresolved",
+        "review_evidence_ids": [
+          "evidence-test-result"
+        ],
+        "learning_nexus_entry_id": "nexus-test-learning",
+        "learning_summary": "The bounded test did not resolve the primary uncertainty.",
+        "external_outcome_status": "not_verified"
+      },
+      "expected": [
+        "Keep external outcome not verified at closure.",
+        "Return evidence-bound learning to Nexus in the same proposed revision."
+      ],
+      "forbidden": [
+        "claim product impact",
+        "omit Nexus learning"
+      ]
+    },
+    {
+      "turn_id": "append-observed-outcome",
+      "fresh_context": true,
+      "input": "The host supplies supported post-release evidence for the closed hypothesis, but no attribution receipt.",
+      "host_state": {
+        "workspace_revision": 5,
+        "hypothesis_state": "closed",
+        "new_evidence_ids": [
+          "evidence-outcome-observed"
+        ],
+        "host_outcome_receipt": null
+      },
+      "expected": [
+        "Leave the closed hypothesis revision unchanged.",
+        "Append an observed or attribution_limited outcome event with the supplied evidence.",
+        "Keep verified unavailable without a host receipt."
+      ],
+      "forbidden": [
+        "edit the terminal result",
+        "verified"
+      ]
+    },
+    {
+      "turn_id": "supersede-outcome",
+      "fresh_context": true,
+      "input": "Later evidence contradicts and supersedes the prior outcome observation.",
+      "host_state": {
+        "workspace_revision": 6,
+        "hypothesis_state": "closed",
+        "prior_outcome_event_id": "outcome-observed",
+        "new_evidence_ids": [
+          "evidence-outcome-contradictory"
+        ]
+      },
+      "expected": [
+        "Append a withdrawn outcome event that supersedes the latest prior event.",
+        "Retain both outcome events and both evidence records for audit."
+      ],
+      "forbidden": [
+        "delete the old outcome",
+        "continue presenting the superseded observation as current"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Terminal hypothesis history remains immutable while post-release outcomes evolve.",
+    "The latest append-only outcome event is the current assertion.",
+    "Outcome strength is bounded by evidence and host receipts."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

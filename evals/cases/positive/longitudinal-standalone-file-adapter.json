@@ -1,0 +1,30 @@
+{
+  "id": "longitudinal-standalone-file-adapter",
+  "case_id": "longitudinal-standalone-file-adapter",
+  "mode": "standalone",
+  "prompt": "Я явно выбрал отдельную локальную папку для состояния гипотез и разрешаю сохранить туда подготовленный change set. Репозиторий skill должен остаться неизменным. Как продолжить?",
+  "expected": [
+    "Различить package-owned memory и разрешённое host-owned file persistence.",
+    "Использовать только явно выбранный state root вне каталога skill.",
+    "Сначала сформировать schema-valid change set с expected revision, затем передать его file adapter.",
+    "После commit проверить accepted receipt и новую revision; только тогда сказать persisted.",
+    "Не приписывать file adapter identity, source access, scheduler или автономность."
+  ],
+  "forbidden": [
+    "записать состояние внутрь каталога skill",
+    "выбрать скрытый default path без пользователя",
+    "обойти optimistic concurrency",
+    "назвать adapter памятью самого skill"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "standalone-adapter",
+    "persistence-handoff",
+    "host-boundary"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/bayram-skill-architecture.md",
+    "scripts/hypothesis_state.py"
+  ]
+}

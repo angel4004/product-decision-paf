@@ -1,0 +1,29 @@
+{
+  "id": "longitudinal-post-release-outcome",
+  "case_id": "longitudinal-post-release-outcome",
+  "mode": "standalone",
+  "prompt": "H-021 была закрыта и её test verdict уже неизменяем. После релиза host передал новое поддержанное evidence E-90 об изменении целевой метрики. Продолжи долгосрочную работу, не переписывая закрытую карточку.",
+  "expected": [
+    "Оставить terminal Hypothesis Card и её verdict неизменными.",
+    "Предложить append-only outcome event, связанный с H-021, её decision scope и E-90.",
+    "Различить observed, attribution_limited и verified по силе evidence и наличию host receipt.",
+    "Включить outcome event и evidence в один versioned change set.",
+    "Не заявлять сохранение до accepted persistence receipt."
+  ],
+  "forbidden": [
+    "переписать result закрытой карточки",
+    "назвать outcome verified без host receipt",
+    "потерять поздний outcome между сессиями"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "external-outcome",
+    "terminal-immutability",
+    "atomic-state"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "assets/hypothesis-change-set.schema.json"
+  ]
+}

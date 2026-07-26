@@ -1,0 +1,62 @@
+{
+  "id": "current-nexus-authority",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-downstream",
+  "turns": [
+    {
+      "turn_id": "supported-upstream",
+      "fresh_context": true,
+      "input": "Prepare a downstream value hypothesis from a closed confirmed customer-need hypothesis.",
+      "host_state": {
+        "workspace_revision": 7,
+        "upstream_verdict": "confirmed",
+        "active_supported_evidence_ids": [
+          "evidence-need"
+        ],
+        "active_supported_nexus_entry_ids": [
+          "nexus-need"
+        ]
+      },
+      "expected": [
+        "Require the dependency to cite current supported evidence and current supported Nexus lineage."
+      ],
+      "forbidden": [
+        "rely on the verdict alone"
+      ]
+    },
+    {
+      "turn_id": "authority-superseded",
+      "fresh_context": true,
+      "input": "New contradictory evidence supersedes both the old evidence and its Nexus learning.",
+      "host_state": {
+        "workspace_revision": 8,
+        "upstream_verdict": "confirmed",
+        "superseded_evidence_ids": [
+          "evidence-need"
+        ],
+        "superseded_nexus_entry_ids": [
+          "nexus-need"
+        ]
+      },
+      "expected": [
+        "Preserve the historical upstream verdict.",
+        "Remove its current authority for ready_to_run.",
+        "Block or supersede the downstream card until current support exists."
+      ],
+      "forbidden": [
+        "ignore the correction",
+        "delete historical evidence",
+        "keep ready_to_run on stale authority"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Historical verdict and current decision authority are distinct.",
+    "Superseded evidence and Nexus entries cannot support a new downstream gate."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/paf-hypothesis-method.md",
+    "scripts/hypothesis_state.py"
+  ]
+}

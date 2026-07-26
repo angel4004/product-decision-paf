@@ -1,0 +1,31 @@
+{
+  "id": "longitudinal-resume-from-receipt",
+  "case_id": "longitudinal-resume-from-receipt",
+  "mode": "standalone",
+  "prompt": "Продолжи гипотезу H-007. Host передал workspace ws-demo revision 4, Hypothesis Card revision 2, accepted receipt для revision 4 и новое evidence ref E-12. Нужно подготовить следующий шаг, но запись ещё не выполнялась.",
+  "expected": [
+    "Использовать переданный versioned snapshot и accepted receipt как точку продолжения, а не восстанавливать состояние из памяти чата.",
+    "Сохранить stable workspace_id и hypothesis_id, установить expected workspace revision 4 и подготовить следующую immutable Hypothesis Card revision.",
+    "Связать E-12 с утверждением и включить новое знание в atomic Nexus delta.",
+    "Вернуть persistence handoff со статусом proposed и один следующий шаг.",
+    "Не утверждать, что новая revision уже сохранена, пока adapter не вернул accepted receipt."
+  ],
+  "forbidden": [
+    "начать новую несвязанную гипотезу без объяснения",
+    "считать chat history durable state",
+    "заявить saved без нового accepted receipt",
+    "перезаписать revision 2 на месте"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "persistence-handoff",
+    "hypothesis-card",
+    "und-id-ex"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "assets/hypothesis-change-set.schema.json",
+    "assets/persistence-receipt.schema.json"
+  ]
+}

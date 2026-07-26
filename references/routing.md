@@ -5,6 +5,7 @@
 | Route | Trigger | First useful output | Default asset |
 |---|---|---|---|
 | PAF hypothesis | Product hypothesis, experiment, or request to decide what to validate | Base, hypothesis class, upstream evidence, Hypothesis Card | `assets/hypothesis-card-template.md` |
+| Longitudinal hypothesis state | Start, resume, save, hand off, recover, or append a post-release outcome | Loaded scope/tenure/revision or explicit no-state gap, then Hypothesis Card revision or outcome event + typed Nexus/evidence/claim/outcome delta + persistence handoff | `assets/hypothesis-card-template.md` plus state metadata |
 | Goal framing | Measurable outcome or product direction | Goal, baseline, unknown, decision checkpoint | `assets/next-step-template.md` |
 | Evidence-gap review | Recommendation requested with incomplete evidence | Prioritized evidence gaps and blocked claims | `assets/evidence-gap-template.md` |
 | PAF consistency | PAF method, conflicting hypothesis claims, or experiment review | Hypothesis class, upstream dependencies, validation and decision rules | `assets/paf-consistency-template.md` |
@@ -19,8 +20,8 @@ decision-critical uncertainty. Do not produce several full artifacts.
 
 Implicit activation is appropriate when the request explicitly concerns a
 product decision, product hypothesis, product evidence, PAF, a product
-passport, disputed product claims, a next product step, or founder/CPO product
-argumentation.
+passport, disputed product claims, a next product step, longitudinal hypothesis
+work, or founder/CPO product argumentation.
 
 Positive examples include:
 
@@ -28,11 +29,19 @@ Positive examples include:
 - "Есть ли здесь PMF/PCF evidence?"
 - "Сделай product passport."
 - "Какой следующий продуктовый шаг?"
+- "Продолжи гипотезу из принятой workspace revision и Nexus snapshot."
+- "Обнови post-release outcome закрытой гипотезы."
 - "Проверь claims в artifact."
 
 Do not activate, or explicitly narrow scope, for ordinary coding, a request to
-become the user's root agent, durable personal memory, an unapproved external
-write, pure visual production, or financial, legal, and medical advice.
+become the user's root agent, hidden durable personal memory, an unapproved
+write, pure visual production, or financial, legal, and medical advice. An
+explicitly authorized host-owned hypothesis state root is in scope; it does not
+become personal memory owned by the skill.
+
+Treat Nexus as domain content, not the host store. A continuation claim requires
+both loaded state and a matching accepted persistence receipt; chat history is
+not a substitute.
 
 ## Source route
 

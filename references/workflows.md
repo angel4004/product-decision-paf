@@ -1,26 +1,46 @@
 # Workflows
 
+## Contents
+
+- [PAF hypothesis review](#paf-hypothesis-review)
+- [Goal framing and next step](#goal-framing-and-next-step)
+- [Evidence-gap review](#evidence-gap-review)
+- [PAF consistency review](#paf-consistency-review)
+- [Product passport](#product-passport)
+- [Decision or argument review](#decision-or-argument-review)
+- [Client feedback](#client-feedback)
+- [Post-release outcome update](#post-release-outcome-update)
+- [Recovery](#recovery)
+
 ## PAF hypothesis review
 
-1. Set the product/business goal and inspect current Nexus context.
+1. Load the accepted workspace revision. Confirm the active decision scope,
+   owner tenure, product/business goal, and current Nexus context.
 2. Choose `null-base` when no evidence foundation exists; choose `data-base`
    when current behavior or product data can reveal an anomaly or bottleneck.
-3. Classify the earliest uncertainty: customer/need, value proposition,
-   solution, business model, acquisition/activation, onboarding, or
-   business-model impact.
+3. Classify the earliest uncertainty as customer/need, value proposition,
+   solution, or business model. Record acquisition/activation, onboarding,
+   go-to-market, adoption, and post-release impact as lifecycle context rather
+   than additional PAF hypothesis classes.
 4. Preserve upstream dependencies. Do not use solution interest as proof of a
    need, value demand as proof of solution effectiveness, or feature use as
-   proof of business impact.
+   proof of business impact. Recheck support against current unsuperseded
+   supported evidence and current supported Nexus lineage; a historical closed
+   verdict alone is insufficient.
 5. Create one `assets/hypothesis-card-template.md` with the experiment,
    primary and guardrail metrics, threshold/control, sample, conditions, and
    confirm/disconfirm/inconclusive decisions.
 6. Use Understand → Identify → Execute. Execute at scale only after the
-   relevant solution is supported; then measure goal attainment and add all
-   new knowledge back to context.
+   relevant solution is supported; then record evidence-bound
+   `metric_results`, add typed Nexus entries, and bind their same-revision IDs
+   through `result.new_nexus_entry_ids`.
 
 Value proposition and solution hypotheses may share one experiment when a
 concrete interaction is required to test value. Keep the two claims, metrics,
-and conclusions distinct.
+and conclusions distinct. A solution and business-model hypothesis may also
+share a soft-launch experiment. Both co-test forms require `mode = co_test`, a
+shared plan ref, separate approved contracts and verdicts, and shared execution
+evidence after launch. One peer may close while the other remains reviewable.
 
 ## Goal framing and next step
 
@@ -45,7 +65,9 @@ and conclusions distinct.
 3. Check upstream knowledge, the hypothesis statement, segment, experiment,
    metric, threshold/control, sample, conditions, and decision rules.
 4. Mark evidence `supported`, `partial`, `contradictory`, `stale`, or
-   `missing`; record confirmation, disconfirmation, and unexpected knowledge.
+   `missing`; record confirmation, disconfirmation, and unexpected knowledge
+   as typed Nexus entries. Record strong-claim blocking or resolution as
+   append-only `claim_log` events.
 5. State which downstream claim remains blocked and choose one next PAF
    artifact or experiment. Do not invent a Confidence Point or composite score.
 
@@ -80,9 +102,45 @@ goal, adoption blocker or opportunity, and evidence limits. Choose one immediate
 use—retention, reply, MVP clarification, market test, or development input—then
 define the next observation before expanding the artifact.
 
+## Post-release outcome update
+
+1. Load the closed card and its latest `outcome_log` event.
+2. Treat the card's external-outcome fields as the immutable closure snapshot.
+3. Validate that new evidence is current and unsuperseded.
+4. Append one event: `observed`/`verified` require supported evidence,
+   `attribution_limited` allows supported/partial evidence plus a limitation
+   note, and `withdrawn` requires contradictory evidence.
+5. Supersede exactly the prior latest event and include the new ID in
+   `appended_outcome_event_ids`.
+
 ## Recovery
 
 If a source read, model turn, or tool fails, preserve the decision state:
 available facts, missing source, blocked claim, chosen artifact, and next retry.
-Standalone use can describe this checkpoint but cannot persist or resume it
-without host support.
+For longitudinal work, prepare the versioned artifact defined in
+`references/hypothesis-state-and-persistence.md`: a complete change set when
+all required bindings are available, otherwise a schema-valid,
+non-committable proposal intent. A standalone host may commit only the complete
+change set through `scripts/hypothesis_state.py` against an explicitly selected
+absolute external local-filesystem state root; Robin may use its own adapter.
+Without an accepted persistence receipt, return a complete candidate as
+`proposed` when an adapter handoff exists, or `not_persisted` when no usable
+adapter/write authority exists. A proposal intent is always `not_persisted` and
+`commit_eligible: false`. If the standalone adapter exits `6`, report
+`outcome_unknown`, run `verify` and `load`, recover an unchanged stale lock if
+necessary, then replay only the exact unchanged change set so idempotency
+returns the stored receipt or commits it once.
+
+An unresolved owner rule may be checkpointed only as
+`awaiting_owner_rule` with an exact subject-bound
+`required_owner_approvals` entry. That accepted receipt proves the checkpoint
+was stored; it does not authorize execution. Do not enter `running` without a
+host-supplied `execution_ref` and a `state_transition` approval bound to the
+candidate revision and that ref. The skill may return the complete candidate
+and required approval as `proposed`; it must not claim the transition entered
+`running`.
+
+When a pending request is withdrawn or made obsolete, the same candidate
+revision that records the owner transition must append a matching
+`pending_owner_resolutions` record and preserve the original request in
+immutable history.

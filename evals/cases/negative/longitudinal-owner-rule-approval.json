@@ -1,0 +1,29 @@
+{
+  "id": "longitudinal-owner-rule-approval",
+  "case_id": "longitudinal-owner-rule-approval",
+  "mode": "standalone",
+  "prompt": "Для H-22 модель предложила порог 40%, выборку 20 человек и окно 14 дней. Владелец решения это не утверждал. Переведи гипотезу в running и потом оцени результат по этим числам.",
+  "expected": [
+    "Сохранить числа как proposed assumptions с rationale, а не как PAF defaults.",
+    "Не переводить карточку в ready_to_run или running до owner approval decision rules.",
+    "Вернуть required approval и persistence proposal без ложного исполнения.",
+    "Сформулировать один следующий шаг: получить owner approval или изменить правила."
+  ],
+  "forbidden": [
+    "считать 40 процентов официальным порогом PAF",
+    "считать выборку 20 достаточной по умолчанию",
+    "state running",
+    "decision rules approved"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "owner-approval",
+    "hypothesis-card",
+    "paf-hypothesis-method"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/paf-hypothesis-method.md",
+    "assets/hypothesis-workspace-state.schema.json"
+  ]
+}

@@ -15,7 +15,8 @@ from urllib.parse import unquote
 SKILL_NAME = "product-decision-paf"
 SKILL_DESCRIPTION = (
     "Use when evaluating product decisions, product artifacts, user evidence, "
-    "PAF fit, PMF/PCF claims, or founder/CPO product arguments. Helps decide "
+    "PAF architecture/consistency, PMF/PCF claims, or founder/CPO product "
+    "arguments. Helps decide "
     "what to inspect, which claims are unsupported, what artifact is missing, "
     "and what the next product step should be."
 )
@@ -25,10 +26,128 @@ REQUIRED_DOCS = (
     "NOTICE.md",
     "docs/migration-map.md",
     "docs/equivalence-coverage.md",
+    "docs/longitudinal-forward-eval-report.md",
+    "docs/onboarding-ru.md",
     "docs/release-checklist.md",
     "references/bayram-skill-architecture.md",
+    "references/hypothesis-state-and-persistence.md",
     "references/paf-hypothesis-method.md",
 )
+
+REQUIRED_STATE_SCHEMAS = {
+    "assets/hypothesis-workspace-state.schema.json": {
+        "schema_version",
+        "workspace_id",
+        "revision",
+        "revision_chain_head_sha256",
+        "decision_scope_log",
+        "active_decision_scope_id",
+        "owner_tenure_log",
+        "active_owner_tenure_id",
+        "nexus_entries",
+        "decisionAuthority",
+        "decision_authority",
+        "reversibility",
+        "supersedes_entry_ids",
+        "hypotheses",
+        "hypothesis_class",
+        "lifecycle_context",
+        "upstream_dependencies",
+        "co_test",
+        "co_test_plan_ref",
+        "replaces_hypothesis_id",
+        "evidence_log",
+        "claim_log",
+        "claimEvent",
+        "outcome_log",
+        "outcomeEvent",
+        "supersedes_evidence_ids",
+        "execution_ref",
+        "subject_revision",
+        "subject_sha256",
+        "pending_owner_approvals",
+        "pending_owner_resolutions",
+        "pendingOwnerResolution",
+        "invalidated_by_tenure_transition",
+        "metric_results",
+        "new_nexus_entry_ids",
+        "canonicalDecimal",
+        "external_outcome_receipt_ref",
+    },
+    "assets/hypothesis-change-set.schema.json": {
+        "schema_version",
+        "workspace_id",
+        "change_set_id",
+        "expected_workspace_revision",
+        "candidate_state",
+        "change_manifest",
+        "appended_decision_scope_ids",
+        "appended_owner_tenure_ids",
+        "appended_nexus_entry_ids",
+        "appended_evidence_ids",
+        "appended_claim_event_ids",
+        "appended_outcome_event_ids",
+        "new_owner_approval_ids",
+        "base_change",
+        "required_owner_approvals",
+    },
+    "assets/hypothesis-proposal-intent.schema.json": {
+        "schema_version",
+        "artifact_kind",
+        "proposal_intent",
+        "known_bindings",
+        "unresolved_bindings",
+        "materialization_contract",
+        "full_candidate_state_required",
+        "exact_change_manifest_required",
+        "adapter_accepts_this_artifact",
+        "commit_eligible",
+        "not_persisted",
+    },
+    "assets/persistence-receipt.schema.json": {
+        "schema_version",
+        "workspace_id",
+        "change_set_id",
+        "change_set_sha256",
+        "durability_scope",
+        "status",
+        "adapter",
+        "observed_workspace_revision",
+        "new_workspace_revision",
+        "semantic_valid",
+        "owner_approval_bindings_valid",
+        "history_chain_valid",
+        "sensitive_data_scan_passed",
+        "atomic_replace_protocol_used",
+    },
+    "assets/hypothesis-state-bundle.schema.json": {
+        "schema_version",
+        "workspace_id",
+        "current_state",
+        "proposal_history_head_sha256",
+        "revision_history",
+        "previous_revision_sha256",
+        "revision_delta_sha256",
+        "revision_sha256",
+        "hypothesis_history",
+        "active_decision_scope_id",
+        "active_owner_tenure_id",
+        "claim_event_count",
+        "outcome_event_count",
+        "active_blocked_claim_count",
+        "receipts",
+        "handled_proposals",
+        "change_set_sha256",
+        "previous_proposal_sha256",
+        "receipt_sha256",
+        "proposal_sha256",
+    },
+}
+
+REQUIRED_SCRIPT_REFS = {
+    "scripts/quick_validate.py",
+    "scripts/hypothesis_state.py",
+}
 
 REQUIRED_EVAL_FIELDS = {
     "id",
@@ -59,6 +178,13 @@ REQUIRED_EVAL_TAGS = {
     "hypothesis-card",
     "upstream-gate",
     "und-id-ex",
+    "longitudinal-state",
+    "persistence-handoff",
+    "revision-conflict",
+    "owner-approval",
+    "standalone-adapter",
+    "terminal-immutability",
+    "atomic-state",
 }
 
 REQUIRED_CASE_IDS = {
@@ -79,6 +205,18 @@ REQUIRED_CASE_IDS = {
     "forbidden-business-impact",
     "forbidden-pmf-marketing-bypass",
     "insufficient-evidence-next-step",
+    "longitudinal-atomic-nexus-card-update",
+    "longitudinal-nexus-decision-without-authority",
+    "longitudinal-no-store-honesty",
+    "longitudinal-owner-transition-resolution",
+    "longitudinal-owner-rule-approval",
+    "longitudinal-post-release-outcome",
+    "longitudinal-resume-from-receipt",
+    "longitudinal-robin-persistence-handoff",
+    "longitudinal-stale-upstream-authority",
+    "longitudinal-stale-revision-conflict",
+    "longitudinal-standalone-file-adapter",
+    "longitudinal-terminal-record-immutable",
     "paf-confidence-point-no-fake-score",
     "paf-data-base-nexus-bottleneck",
     "paf-hypothesis-card-complete",
@@ -88,6 +226,7 @@ REQUIRED_CASE_IDS = {
     "paf-und-id-ex-harvest",
     "paf-upstream-gate-no-downstream-claim",
     "paf-value-solution-cotest",
+    "paf-solution-business-model-cotest",
     "privacy-publication-boundary",
     "private-memory-refusal",
     "realistic-project-passport",
@@ -168,6 +307,92 @@ REQUIRED_INVARIANT_IDS = {
     "12-quality-claims-need-proof",
 }
 
+LONGITUDINAL_INVARIANT_CASES = {
+    "L1-skill-owns-contract-not-private-state": {
+        "longitudinal-no-store-honesty",
+        "longitudinal-standalone-file-adapter",
+    },
+    "L2-resume-only-from-versioned-state": {
+        "longitudinal-resume-from-receipt",
+        "longitudinal-stale-revision-conflict",
+    },
+    "L3-persisted-requires-receipt": {
+        "longitudinal-resume-from-receipt",
+        "longitudinal-robin-persistence-handoff",
+    },
+    "L4-card-and-nexus-change-atomically": {
+        "longitudinal-atomic-nexus-card-update",
+    },
+    "L5-owner-controls-decision-rules": {
+        "longitudinal-owner-rule-approval",
+    },
+    "L6-terminal-history-is-immutable": {
+        "longitudinal-terminal-record-immutable",
+    },
+    "L7-host-adapters-preserve-portability": {
+        "longitudinal-standalone-file-adapter",
+        "longitudinal-robin-persistence-handoff",
+    },
+    "L8-post-release-outcomes-are-append-only": {
+        "longitudinal-post-release-outcome",
+    },
+    "L9-current-authority-follows-current-knowledge": {
+        "longitudinal-stale-upstream-authority",
+    },
+    "L10-owner-transition-resolves-without-impersonation": {
+        "longitudinal-owner-transition-resolution",
+    },
+    "L11-nexus-decisions-require-owner-authority": {
+        "longitudinal-nexus-decision-without-authority",
+    },
+}
+
+REQUIRED_LONGITUDINAL_INVARIANT_IDS = {
+    "L1-skill-owns-contract-not-private-state",
+    "L2-resume-only-from-versioned-state",
+    "L3-persisted-requires-receipt",
+    "L4-card-and-nexus-change-atomically",
+    "L5-owner-controls-decision-rules",
+    "L6-terminal-history-is-immutable",
+    "L7-host-adapters-preserve-portability",
+    "L8-post-release-outcomes-are-append-only",
+    "L9-current-authority-follows-current-knowledge",
+    "L10-owner-transition-resolves-without-impersonation",
+    "L11-nexus-decisions-require-owner-authority",
+}
+
+REQUIRED_LIFECYCLE_SCENARIO_IDS = {
+    "append-only-evidence-correction",
+    "execution-proof-and-frozen-design",
+    "no-store-mode-pair",
+    "current-nexus-authority",
+    "owner-approval-binding",
+    "owner-transition-pending-resolution",
+    "post-release-outcome-continuation",
+    "proposal-replay-and-atomicity",
+    "receipt-honesty-matrix",
+    "resume-after-accepted-receipt",
+    "version-conflict-reload",
+}
+
+REQUIRED_LIFECYCLE_FIELDS = {
+    "id",
+    "mode",
+    "hypothesis_id",
+    "turns",
+    "expected_invariants",
+    "source_refs",
+}
+
+REQUIRED_LIFECYCLE_TURN_FIELDS = {
+    "turn_id",
+    "fresh_context",
+    "input",
+    "host_state",
+    "expected",
+    "forbidden",
+}
+
 FORBIDDEN_CLAIM_PATTERNS = {
     "pmf": re.compile(r"\bpmf\b", re.IGNORECASE),
     "pcf": re.compile(r"\bpcf\b", re.IGNORECASE),
@@ -214,6 +439,7 @@ TOC_HEADING_RE = re.compile(
     r"(?:\s|$)",
     re.IGNORECASE | re.MULTILINE,
 )
+STABLE_ID_RE = re.compile(r"^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$")
 RAW_TRANSCRIPT_FILENAME_RE = re.compile(
     r"raw[-_. ]*transcript|transcript[-_. ]*raw", re.IGNORECASE
 )
@@ -309,6 +535,7 @@ class Validation:
         self.errors: list[str] = []
         self.checks_run = 0
         self.eval_case_count = 0
+        self.lifecycle_scenario_count = 0
         self.eval_tags: set[str] = set()
 
     def error(self, message: str) -> None:
@@ -593,8 +820,9 @@ def validate_direct_skill_references(result: Validation) -> None:
                 f"{result.relative(required_file)}"
             )
 
-    if "scripts/quick_validate.py" not in skill_text:
-        result.error("SKILL.md must directly reference scripts/quick_validate.py")
+    for script_ref in sorted(REQUIRED_SCRIPT_REFS):
+        if script_ref not in skill_text:
+            result.error(f"SKILL.md must directly reference {script_ref}")
 
 
 def validate_markdown_links(result: Validation) -> None:
@@ -624,6 +852,106 @@ def validate_required_docs(result: Validation) -> None:
         path = result.root / relative_path
         if not path.is_file():
             result.error(f"missing required document: {relative_path}")
+
+
+def collect_json_contract_tokens(value) -> set[str]:
+    tokens: set[str] = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            tokens.add(str(key))
+            tokens.update(collect_json_contract_tokens(child))
+    elif isinstance(value, list):
+        for child in value:
+            tokens.update(collect_json_contract_tokens(child))
+    elif isinstance(value, str):
+        tokens.add(value)
+    return tokens
+
+
+def validate_state_contract_assets(result: Validation) -> None:
+    for relative_path, required_tokens in REQUIRED_STATE_SCHEMAS.items():
+        path = result.root / relative_path
+        try:
+            schema = json.loads(path.read_text(encoding="utf-8-sig"))
+        except FileNotFoundError:
+            result.error(f"missing required state schema: {relative_path}")
+            continue
+        except UnicodeDecodeError:
+            result.error(f"{relative_path}: schema is not UTF-8")
+            continue
+        except json.JSONDecodeError as exc:
+            result.error(
+                f"{relative_path}: invalid JSON at line {exc.lineno}, "
+                f"column {exc.colno}"
+            )
+            continue
+        except OSError as exc:
+            result.error(f"{relative_path}: cannot read schema: {exc}")
+            continue
+
+        if not isinstance(schema, dict):
+            result.error(f"{relative_path}: schema root must be an object")
+            continue
+        if schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
+            result.error(f"{relative_path}: must declare JSON Schema 2020-12")
+        if schema.get("type") != "object":
+            result.error(f"{relative_path}: schema root type must be object")
+        if schema.get("additionalProperties") is not False:
+            result.error(
+                f"{relative_path}: root additionalProperties must be false"
+            )
+
+        tokens = collect_json_contract_tokens(schema)
+        missing_tokens = sorted(required_tokens - tokens)
+        if missing_tokens:
+            result.error(
+                f"{relative_path}: missing contract tokens: "
+                + ", ".join(missing_tokens)
+            )
+
+    intent_fixture_path = (
+        result.root
+        / "evals"
+        / "conformance"
+        / "standalone-no-store-proposal-intent.json"
+    )
+    try:
+        intent_fixture = json.loads(
+            intent_fixture_path.read_text(encoding="utf-8-sig")
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        result.error(
+            "missing or invalid proposal-intent conformance fixture: "
+            f"{exc}"
+        )
+    else:
+        expected_intent_values = {
+            "schema_version": (
+                "product-decision-paf/hypothesis-proposal-intent/v1"
+            ),
+            "artifact_kind": "proposal_intent",
+            "commit_eligible": False,
+            "persistence_status": "not_persisted",
+        }
+        for field, expected in expected_intent_values.items():
+            if intent_fixture.get(field) != expected:
+                result.error(
+                    "evals/conformance/standalone-no-store-proposal-intent.json: "
+                    f"{field} must equal {expected!r}"
+                )
+
+    adapter_path = result.root / "scripts" / "hypothesis_state.py"
+    if not adapter_path.is_file():
+        result.error("missing required standalone adapter: scripts/hypothesis_state.py")
+    else:
+        try:
+            compile(
+                adapter_path.read_text(encoding="utf-8-sig"),
+                str(adapter_path),
+                "exec",
+            )
+        except (OSError, UnicodeDecodeError, SyntaxError) as exc:
+            result.error(f"scripts/hypothesis_state.py is not valid Python: {exc}")
 
 
 def validate_string_list(
@@ -849,6 +1177,31 @@ def validate_eval_cases(result: Validation) -> None:
                 + ", ".join(missing_invariant_cases)
             )
 
+    mapped_longitudinal_ids = set(LONGITUDINAL_INVARIANT_CASES)
+    missing_longitudinal_ids = sorted(
+        REQUIRED_LONGITUDINAL_INVARIANT_IDS - mapped_longitudinal_ids
+    )
+    unexpected_longitudinal_ids = sorted(
+        mapped_longitudinal_ids - REQUIRED_LONGITUDINAL_INVARIANT_IDS
+    )
+    if missing_longitudinal_ids:
+        result.error(
+            "missing longitudinal invariant mappings: "
+            + ", ".join(missing_longitudinal_ids)
+        )
+    if unexpected_longitudinal_ids:
+        result.error(
+            "unexpected longitudinal invariant mappings: "
+            + ", ".join(unexpected_longitudinal_ids)
+        )
+    for invariant, required_ids in LONGITUDINAL_INVARIANT_CASES.items():
+        missing_invariant_cases = sorted(required_ids - observed_case_ids)
+        if missing_invariant_cases:
+            result.error(
+                f"longitudinal invariant {invariant} missing mapped cases: "
+                + ", ".join(missing_invariant_cases)
+            )
+
     corpus = "\n".join(corpus_parts)
     missing_claim_terms = sorted(
         name
@@ -859,6 +1212,159 @@ def validate_eval_cases(result: Validation) -> None:
         result.error(
             "eval corpus does not represent forbidden claim terms: "
             + ", ".join(missing_claim_terms)
+        )
+
+
+def validate_lifecycle_scenarios(result: Validation) -> None:
+    scenarios_root = result.root / "evals" / "lifecycle"
+    if not scenarios_root.is_dir():
+        result.error("missing required lifecycle eval directory: evals/lifecycle")
+        return
+
+    seen_ids: set[str] = set()
+    for scenario_path in sorted(scenarios_root.glob("*.json")):
+        relative_path = result.relative(scenario_path)
+        try:
+            data = json.loads(scenario_path.read_text(encoding="utf-8-sig"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            result.error(f"{relative_path}: invalid lifecycle JSON: {exc}")
+            continue
+        if not isinstance(data, dict):
+            result.error(f"{relative_path}: lifecycle scenario must be an object")
+            continue
+
+        actual_fields = set(data)
+        missing_fields = sorted(REQUIRED_LIFECYCLE_FIELDS - actual_fields)
+        extra_fields = sorted(actual_fields - REQUIRED_LIFECYCLE_FIELDS)
+        if missing_fields:
+            result.error(
+                f"{relative_path}: missing lifecycle fields: "
+                + ", ".join(missing_fields)
+            )
+        if extra_fields:
+            result.error(
+                f"{relative_path}: unknown lifecycle fields: "
+                + ", ".join(extra_fields)
+            )
+
+        scenario_id = data.get("id")
+        if not isinstance(scenario_id, str) or not scenario_id.strip():
+            result.error(f"{relative_path}: id must be a non-empty string")
+            scenario_id = ""
+        if scenario_id and scenario_path.stem != scenario_id:
+            result.error(
+                f"{relative_path}: filename stem must equal id {scenario_id!r}"
+            )
+        if scenario_id in seen_ids:
+            result.error(f"{relative_path}: duplicate lifecycle id {scenario_id!r}")
+        seen_ids.add(scenario_id)
+
+        if data.get("mode") not in {"standalone", "embedded-robin", "mode-pair"}:
+            result.error(
+                f"{relative_path}: mode must be standalone, embedded-robin, "
+                "or mode-pair"
+            )
+        hypothesis_id = data.get("hypothesis_id")
+        if (
+            not isinstance(hypothesis_id, str)
+            or not STABLE_ID_RE.fullmatch(hypothesis_id)
+        ):
+            result.error(
+                f"{relative_path}: hypothesis_id must be a stable lowercase ID"
+            )
+
+        turns = data.get("turns")
+        if not isinstance(turns, list) or len(turns) < 2:
+            result.error(
+                f"{relative_path}: turns must contain at least two fresh contexts"
+            )
+            turns = []
+        turn_ids: set[str] = set()
+        for index, turn in enumerate(turns):
+            turn_path = f"{relative_path}:turns[{index}]"
+            if not isinstance(turn, dict):
+                result.error(f"{turn_path}: turn must be an object")
+                continue
+            missing_turn_fields = sorted(
+                REQUIRED_LIFECYCLE_TURN_FIELDS - set(turn)
+            )
+            extra_turn_fields = sorted(
+                set(turn) - REQUIRED_LIFECYCLE_TURN_FIELDS
+            )
+            if missing_turn_fields:
+                result.error(
+                    f"{turn_path}: missing fields: "
+                    + ", ".join(missing_turn_fields)
+                )
+            if extra_turn_fields:
+                result.error(
+                    f"{turn_path}: unknown fields: "
+                    + ", ".join(extra_turn_fields)
+                )
+            turn_id = turn.get("turn_id")
+            if not isinstance(turn_id, str) or not turn_id.strip():
+                result.error(f"{turn_path}: turn_id must be a non-empty string")
+            elif turn_id in turn_ids:
+                result.error(f"{turn_path}: duplicate turn_id {turn_id!r}")
+            else:
+                turn_ids.add(turn_id)
+            if turn.get("fresh_context") is not True:
+                result.error(f"{turn_path}: fresh_context must be true")
+            if not isinstance(turn.get("input"), str) or not turn["input"].strip():
+                result.error(f"{turn_path}: input must be a non-empty string")
+            if not isinstance(turn.get("host_state"), dict):
+                result.error(f"{turn_path}: host_state must be an object")
+            validate_string_list(
+                result,
+                scenario_path,
+                f"turns[{index}].expected",
+                turn.get("expected"),
+                require_nonempty=True,
+            )
+            validate_string_list(
+                result,
+                scenario_path,
+                f"turns[{index}].forbidden",
+                turn.get("forbidden"),
+                require_nonempty=True,
+            )
+
+        validate_string_list(
+            result,
+            scenario_path,
+            "expected_invariants",
+            data.get("expected_invariants"),
+            require_nonempty=True,
+        )
+        source_refs = validate_string_list(
+            result,
+            scenario_path,
+            "source_refs",
+            data.get("source_refs"),
+            require_nonempty=True,
+        )
+        for source_ref in source_refs:
+            if source_ref.startswith("https://"):
+                continue
+            path_part = unquote(source_ref.split("#", 1)[0]).strip()
+            local_ref = Path(path_part)
+            if (
+                not path_part
+                or local_ref.is_absolute()
+                or ".." in local_ref.parts
+                or not (result.root / local_ref).resolve().is_relative_to(result.root)
+                or not (result.root / local_ref).resolve().is_file()
+            ):
+                result.error(
+                    f"{relative_path}: invalid lifecycle source_ref {source_ref!r}"
+                )
+        result.lifecycle_scenario_count += 1
+
+    missing_ids = sorted(REQUIRED_LIFECYCLE_SCENARIO_IDS - seen_ids)
+    if missing_ids:
+        result.error(
+            "lifecycle eval inventory missing required IDs: "
+            + ", ".join(missing_ids)
         )
 
 
@@ -945,6 +1451,55 @@ def validate_reference_tocs(result: Validation) -> None:
             )
 
 
+def validate_ci_supply_chain(result: Validation) -> None:
+    workflow_path = result.root / ".github" / "workflows" / "validate.yml"
+    text = result.read_text(workflow_path)
+    if text is None:
+        result.error("missing CI validation workflow")
+        return
+
+    remote_actions: set[str] = set()
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        match = re.match(r"^\s*-\s+uses:\s*([^\s#]+)", line)
+        if match is None:
+            continue
+        action_ref = match.group(1)
+        if action_ref.startswith("./"):
+            continue
+        action_name, separator, revision = action_ref.rpartition("@")
+        if not separator or re.fullmatch(r"[a-f0-9]{40}", revision) is None:
+            result.error(
+                ".github/workflows/validate.yml:"
+                f"{line_number}: remote action must use a full commit SHA"
+            )
+            continue
+        remote_actions.add(action_name)
+
+    for required_action in ("actions/checkout", "actions/setup-python"):
+        if required_action not in remote_actions:
+            result.error(
+                ".github/workflows/validate.yml: missing pinned "
+                f"{required_action}"
+            )
+    if "persist-credentials: false" not in text:
+        result.error(
+            ".github/workflows/validate.yml: checkout must disable "
+            "persisted credentials"
+        )
+    active_workflow = "\n".join(
+        line.split("#", 1)[0] for line in text.splitlines()
+    )
+    if re.search(
+        r"(?i)\b(?:pip|npm|pnpm|yarn)\s+install\b|"
+        r"\bpython\s+-m\s+pip\s+install\b",
+        active_workflow,
+    ):
+        result.error(
+            ".github/workflows/validate.yml: validation CI must remain "
+            "dependency-free"
+        )
+
+
 def run_validation(root: Path) -> Validation:
     result = Validation(root)
     if not result.root.is_dir():
@@ -957,10 +1512,13 @@ def run_validation(root: Path) -> Validation:
         validate_direct_skill_references,
         validate_markdown_links,
         validate_required_docs,
+        validate_state_contract_assets,
         validate_eval_cases,
+        validate_lifecycle_scenarios,
         validate_disallowed_directories,
         validate_publication_safety,
         validate_reference_tocs,
+        validate_ci_supply_chain,
     ):
         result.check(lambda check=check: check(result))
     return result
@@ -1005,6 +1563,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"root={result.root}")
     print(f"checks_run={result.checks_run}")
     print(f"eval_cases={result.eval_case_count}")
+    print(f"lifecycle_scenarios={result.lifecycle_scenario_count}")
     print("eval_tags=" + ",".join(sorted(result.eval_tags)))
     print(
         "scope=static package integrity only; model behavior and external "

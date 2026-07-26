@@ -1,0 +1,58 @@
+{
+  "id": "no-store-mode-pair",
+  "mode": "mode-pair",
+  "hypothesis_id": "hypothesis-no-store",
+  "turns": [
+    {
+      "turn_id": "standalone-no-store",
+      "fresh_context": true,
+      "input": "Standalone invocation asks to remember H-no-store, but no state root or write authority exists.",
+      "host_state": {
+        "mode": "standalone",
+        "adapter": "missing",
+        "write_authority": false,
+        "request_id": "request-no-store",
+        "intent_id": "intent-no-store",
+        "created_at": "2026-07-26T10:00:00Z",
+        "requested_operation": "create"
+      },
+      "expected": [
+        "Return a schema-valid proposal intent with commit_eligible false and not_persisted because product, scope, owner, and candidate-state bindings are unavailable.",
+        "List every unresolved binding and name the complete change set, authorized adapter, accepted snapshot, and matching receipt requirements."
+      ],
+      "forbidden": [
+        "choose a hidden state root",
+        "promise future recall",
+        "call the incomplete intent a change set"
+      ]
+    },
+    {
+      "turn_id": "robin-failed-store",
+      "fresh_context": true,
+      "input": "Robin invocation receives a failed persistence receipt for the same candidate.",
+      "host_state": {
+        "mode": "embedded-robin",
+        "receipt_status": "failed",
+        "write_authority": true
+      },
+      "expected": [
+        "Return host-required and preserve the bounded retry checkpoint.",
+        "Keep Robin as storage and permission owner."
+      ],
+      "forbidden": [
+        "write Robin memory directly",
+        "report the failed candidate as persisted"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Both modes remain honest when persistence is absent.",
+    "The standalone and Robin boundaries differ without changing PAF reasoning."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/robin-embedded-mode.md",
+    "references/enforcement-boundary.md",
+    "assets/hypothesis-proposal-intent.schema.json"
+  ]
+}

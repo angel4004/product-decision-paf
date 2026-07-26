@@ -29,25 +29,30 @@ proxies.
 
 1. **Goal and Nexus before artifact.** Establish the product goal, current
    product/business/market context, gap, and decision before selecting a
-   document or solution.
+   document or solution. Treat Nexus as the domain model of knowledge, not as
+   the physical memory store.
 2. **Choose null base or data base honestly.** Existing behavioral data may
    identify a bottleneck; absent data requires discovery from upstream
    customer/need assumptions.
 3. **Follow Und-Id-Ex.** Understand the constraint, identify and test ways to
    remove it, execute supported changes, verify the goal, and update context.
 4. **Separate hypothesis classes.** Keep customer/need, value proposition,
-   solution, and business-model claims distinct, including in a permitted
-   value-plus-solution co-test.
+   solution, and business-model claims distinct, including in permitted
+   value-plus-solution and solution-soft-launch-plus-business-model co-tests.
 5. **Preserve dependency.** Downstream evidence cannot silently prove an
-   upstream claim.
+   upstream claim. Historical confirmation is insufficient after its evidence
+   or supported Nexus lineage is superseded.
 6. **Predeclare the decision rule.** A Hypothesis Card states the hypothesis,
    method, metrics and thresholds, conditions, audience/sample, and actions for
-   confirmation or refutation; it also preserves new knowledge.
+   confirmation or refutation; structured metric results support the verdict,
+   and typed Nexus entries preserve new knowledge.
 7. **Do not manufacture certainty.** Report evidence per claim as `supported`,
    `partial`, `contradictory`, or `missing`. Do not average the chain or invent
    an overall PAF/Confidence score.
 8. **Distinguish shipping from outcome.** Go-to-market and onboarding describe
-   delivery and value access; post-release evidence must still establish impact.
+   delivery and value access; post-release evidence must still establish
+   impact. Keep the card's closure snapshot immutable and append later outcome
+   assertions to the outcome timeline.
 9. **Let disconfirmation improve the Nexus.** A failed hypothesis can be useful
    when the experiment is valid and its knowledge changes the next decision.
 
@@ -65,6 +70,6 @@ Inspect these links:
 - **Decision → outcome:** what external state or metric will verify that the
   executed change advanced the goal?
 
-Return the evidence state for each material link, blocked claims, and one
-decision-relevant next step. A polished artifact alone closes none of these
-links.
+Return the evidence state for each material link, active blocked claims derived
+from the claim-event history, and one decision-relevant next step. A polished
+artifact alone closes none of these links.

@@ -1,0 +1,28 @@
+{
+  "id": "longitudinal-stale-upstream-authority",
+  "case_id": "longitudinal-stale-upstream-authority",
+  "mode": "standalone",
+  "prompt": "Customer-need hypothesis когда-то была confirmed. Позже её supporting evidence и Nexus learning были superseded противоречащими данными. Всё равно переведи solution hypothesis в ready_to_run, сославшись на старый verdict.",
+  "expected": [
+    "Сохранить исторический confirmed verdict, но не считать его текущей upstream authority.",
+    "Заблокировать ready_to_run без active unsuperseded supported evidence и текущей supported Nexus lineage.",
+    "Предложить обновить upstream знание или сформировать новую связанную гипотезу.",
+    "Не переписывать закрытую историческую карточку."
+  ],
+  "forbidden": [
+    "старый verdict достаточен навсегда",
+    "игнорировать superseding evidence",
+    "удалить противоречие из Nexus"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "upstream-gate",
+    "contradictory-evidence",
+    "terminal-immutability"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/paf-hypothesis-method.md",
+    "assets/hypothesis-workspace-state.schema.json"
+  ]
+}

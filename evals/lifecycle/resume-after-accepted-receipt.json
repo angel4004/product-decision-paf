@@ -1,0 +1,72 @@
+{
+  "id": "resume-after-accepted-receipt",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-resume",
+  "turns": [
+    {
+      "turn_id": "frame",
+      "fresh_context": true,
+      "input": "Начни H-resume для customer_need. Host сообщает, что workspace ещё не создан.",
+      "host_state": {
+        "workspace_revision": null,
+        "hypothesis_revision": null,
+        "receipt_status": "missing",
+        "workspace_id": "workspace-resume",
+        "hypothesis_id": "hypothesis-resume",
+        "product_ref": "product:resume",
+        "decision_owner_ref": "owner:decision",
+        "owner_tenure_id": "tenure-initial",
+        "decision_scope_id": "scope-initial",
+        "goal": {
+          "actor": "target user",
+          "outcome": "Resolve the named customer need uncertainty.",
+          "baseline": null,
+          "target": null,
+          "period": null,
+          "decision_to_unlock": "Decide whether to proceed to value-proposition testing."
+        }
+      },
+      "expected": [
+        "Create proposal starts workspace and hypothesis at revision 0.",
+        "Persistence remains proposed until an adapter receipt exists."
+      ],
+      "forbidden": [
+        "saved",
+        "remembered"
+      ]
+    },
+    {
+      "turn_id": "resume",
+      "fresh_context": true,
+      "input": "Продолжи ту же гипотезу с новым safe evidence ref.",
+      "host_state": {
+        "workspace_revision": 0,
+        "hypothesis_revision": 0,
+        "receipt_status": "accepted",
+        "receipt_revision": 0,
+        "new_evidence_ids": [
+          "evidence-resume"
+        ]
+      },
+      "expected": [
+        "Reuse hypothesis-resume only from supplied host state.",
+        "Prepare workspace and hypothesis revision 1 with append-only evidence.",
+        "Return a new proposal rather than claiming it was persisted."
+      ],
+      "forbidden": [
+        "recover facts not supplied by the host",
+        "replace the old evidence entry"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Stable hypothesis identity survives a fresh context.",
+    "An accepted prior receipt authorizes continuity, not the next write.",
+    "The new revision is immutable and increases by one."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "assets/persistence-receipt.schema.json"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "longitudinal-stale-revision-conflict",
+  "case_id": "longitudinal-stale-revision-conflict",
+  "mode": "standalone",
+  "prompt": "Примени change set для workspace revision 6. Adapter сообщает, что текущая revision уже 7, потому что другой процесс сохранил новое evidence.",
+  "expected": [
+    "Вернуть conflict и не применять stale transaction.",
+    "Запросить bounded reload revision 7 и relevant latest Hypothesis Card.",
+    "После reload заново оценить evidence и построить новый change set.",
+    "Сохранить чужое новое evidence и не делать blind overwrite."
+  ],
+  "forbidden": [
+    "force apply",
+    "уменьшить current revision",
+    "проигнорировать concurrent evidence",
+    "заявить persisted"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "revision-conflict",
+    "persistence-handoff",
+    "recovery"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-change-set.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "owner-approval-binding",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-owner-binding",
+  "turns": [
+    {
+      "turn_id": "checkpoint-pending-rule",
+      "fresh_context": true,
+      "input": "The model proposed a threshold, sample, and time window. The decision owner has not approved them.",
+      "host_state": {
+        "workspace_revision": null,
+        "hypothesis_revision": null,
+        "receipt_status": "missing",
+        "workspace_id": "workspace-owner-binding",
+        "hypothesis_id": "hypothesis-owner-binding",
+        "decision_scope_id": "scope-initial",
+        "owner_ref": "owner:decision",
+        "owner_tenure_id": "tenure-old",
+        "proposed_subject": {
+          "metrics": [
+            {
+              "metric_id": "metric-activation",
+              "criterion": "conversion_rate >= 0.40",
+              "criterion_provenance": "proposed_assumption"
+            }
+          ],
+          "sample": {
+            "population": "eligible_accounts",
+            "target_size": 100,
+            "inclusion": [
+              "new_accounts"
+            ],
+            "exclusion": [
+              "internal_accounts"
+            ],
+            "rationale": "bounded test",
+            "provenance": "proposed_assumption"
+          },
+          "time_window": {
+            "definition": "28 days",
+            "rationale": "bounded observation",
+            "provenance": "proposed_assumption"
+          }
+        },
+        "approval_subject_revision": 0,
+        "approval_subject_sha256": "497d5e6010632906fe7c5047b281f3ebc1cc01415d09fe543ac327189cacd335"
+      },
+      "expected": [
+        "Keep the card in awaiting_owner_rule.",
+        "Return a required approval bound to the exact subject revision and hash.",
+        "Allow a persistence proposal for the checkpoint without treating it as permission to run."
+      ],
+      "forbidden": [
+        "ready_to_run",
+        "running",
+        "owner approved"
+      ]
+    },
+    {
+      "turn_id": "resume-with-bound-approval",
+      "fresh_context": true,
+      "input": "Resume from the accepted awaiting-owner checkpoint. The host supplies the decision owner's approval for the exact unchanged subject.",
+      "host_state": {
+        "workspace_revision": 0,
+        "hypothesis_revision": 0,
+        "receipt_status": "accepted",
+        "receipt_revision": 0,
+        "approval_owner_match": true,
+        "approval_subject_hash_match": true
+      },
+      "expected": [
+        "Accept the supplied approval only because owner, revision, and subject hash match.",
+        "Prepare revision 1 as ready_to_run while preserving the approved validation design."
+      ],
+      "forbidden": [
+        "claim that the skill authenticated the human identity",
+        "running without execution evidence"
+      ]
+    },
+    {
+      "turn_id": "changed-rule-invalidates-approval",
+      "fresh_context": true,
+      "input": "The threshold was changed after approval while the old approval receipt was supplied.",
+      "host_state": {
+        "workspace_revision": 1,
+        "hypothesis_revision": 1,
+        "receipt_status": "accepted",
+        "approval_subject_hash_match": false
+      },
+      "expected": [
+        "Reject reuse of the old approval.",
+        "Keep execution blocked and request a new subject-bound owner decision."
+      ],
+      "forbidden": [
+        "reuse the old approval",
+        "treat the changed threshold as approved"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "A persisted awaiting-owner checkpoint is not execution authority.",
+    "Approval is bound to owner, subject revision, and canonical subject hash.",
+    "Changing a decision rule invalidates the prior approval."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-change-set.schema.json",
+    "assets/hypothesis-workspace-state.schema.json"
+  ]
+}

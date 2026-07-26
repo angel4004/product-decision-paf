@@ -1,0 +1,60 @@
+{
+  "id": "owner-transition-pending-resolution",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-owner-transition",
+  "turns": [
+    {
+      "turn_id": "old-owner-request",
+      "fresh_context": true,
+      "input": "Persist an awaiting-owner checkpoint with an exact pending decision-rule request.",
+      "host_state": {
+        "workspace_revision": 2,
+        "hypothesis_revision": 1,
+        "workspace_id": "workspace-owner-transition",
+        "hypothesis_id": "hypothesis-owner-transition",
+        "owner_ref": "owner:former",
+        "owner_tenure_id": "tenure-old",
+        "receipt_status": "accepted",
+        "approval_scope": "decision_rule",
+        "approval_subject_revision": 1,
+        "approval_subject_sha256": "a5be8e65c685ea5859851e950b95497f30c978eea30a2ab17962c2055b4c6d5f",
+        "source_change_set_id": "change-owner-rule-request"
+      },
+      "expected": [
+        "Bind the pending request to tenure-old, its subject revision, hash, and creation change set."
+      ],
+      "forbidden": [
+        "treat the request as approval"
+      ]
+    },
+    {
+      "turn_id": "new-owner-invalidates",
+      "fresh_context": true,
+      "input": "The host supplies an authenticated owner-tenure transition. The former owner is unavailable.",
+      "host_state": {
+        "workspace_revision": 3,
+        "previous_owner_tenure_id": "tenure-old",
+        "active_owner_tenure_id": "tenure-new",
+        "transition_receipt_ref": "approval:owner-transition"
+      },
+      "expected": [
+        "Keep the old request in immutable history.",
+        "Append an invalidated_by_tenure_transition resolution bound to the exact old subject.",
+        "Request any new decision from tenure-new."
+      ],
+      "forbidden": [
+        "silently drop the old request",
+        "fabricate a decision by tenure-old",
+        "carry old authority into tenure-new"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Owner transition cannot erase or impersonate a pending decision.",
+    "A typed resolution removes the deadlock while retaining audit history."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json"
+  ]
+}

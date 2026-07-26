@@ -80,6 +80,46 @@ The PAF-specific cases enforce these distinctions:
   `proposed assumption`, include its rationale, and remain subject to owner
   approval before it becomes a decision rule.
 
+## Longitudinal hypothesis-state layer
+
+Long-term work is tested as a portable state protocol, not as hidden memory
+inside the skill. With a bounded versioned snapshot and all required bindings,
+the skill returns a complete candidate transaction. If a required binding is
+missing, it returns a separate schema-valid, non-committable proposal intent.
+Only a host adapter can persist a complete change set and issue an accepted
+receipt.
+
+The longitudinal cases require:
+
+- stable workspace and hypothesis IDs;
+- immutable record revisions and optimistic concurrency;
+- separate four-value PAF `hypothesis_class` and operational
+  `lifecycle_context`;
+- owner approval before proposed thresholds become decision rules;
+- typed owner-tenure invalidation when an old pending request cannot be
+  answered;
+- an atomic Hypothesis Card plus Nexus update;
+- owner-bound Nexus decisions and current, unsuperseded upstream authority;
+- append-only post-release outcome events after terminal closure;
+- append-only evidence and terminal history;
+- `proposed` or `not_persisted` until an adapter receipt exists;
+- exact separation of `proposal_intent` (`commit_eligible: false`) from a
+  complete change set;
+- equivalent contracts for a user-selected standalone file adapter and Robin.
+
+The eleven files under `evals/lifecycle/` are multi-invocation scenarios. Every
+turn is marked `fresh_context: true`: the next invocation may use only its
+host-supplied state, receipt, and new evidence. They cover accepted-resume,
+standalone/Robin no-store behavior, receipt mismatch, revision conflict with
+reload, append-only evidence correction, subject-bound owner approval,
+execution proof with frozen validation, and proposal replay/atomicity. Their
+additional scenarios cover owner transition without impersonation,
+post-release outcome continuation, and invalidation of superseded Nexus
+authority. Deterministic validation checks scenario shape and coverage. The
+proposal-intent fixture is schema- and semantic-validated by adapter tests. A
+model runner is still required to grade semantic outputs, and a semantic plan
+is not by itself evidence that the model emitted a schema-valid transaction.
+
 ## Coverage
 
 `allow_implicit_invocation` is `false`. Therefore positive activation fixtures
@@ -111,10 +151,22 @@ scope or refusal after an explicit but unsuitable invocation.
 | Hypothesis type classification | `paf-hypothesis-type-classification` | Official customer, value-proposition, solution and business-model hypothesis pages |
 | Upstream stage gate | `paf-upstream-gate-no-downstream-claim` | Official Product Discovery and Feature Life Cycle stage order |
 | Value and solution co-test | `paf-value-solution-cotest` | Official Feature Life Cycle value/solution validation rule |
+| Solution and business-model co-test | `paf-solution-business-model-cotest` | Official solution soft-launch and business-model hypothesis guidance |
 | Complete Hypothesis Card | `paf-hypothesis-card-complete` | Official hypothesis pages and Feature Life Cycle artifact model |
 | Und-Id-Ex and Harvest | `paf-und-id-ex-harvest` | Official PAF main process and Harvesting event |
 | Confidence Point boundary | `paf-confidence-point-no-fake-score` | Official PAF main Confidence Point definition |
 | No invented PAF defaults | `paf-no-invented-threshold` | Official PAF hypothesis templates require criteria, while the concrete values remain context-dependent |
+| Resume from durable state | `longitudinal-resume-from-receipt`, `longitudinal-no-store-honesty` | `references/hypothesis-state-and-persistence.md`; workspace and receipt schemas |
+| Optimistic concurrency | `longitudinal-stale-revision-conflict` | Change-set schema and standalone adapter |
+| Owner-approved decision rules | `longitudinal-owner-rule-approval` | PAF threshold boundary plus hypothesis lifecycle |
+| Atomic Nexus and card update | `longitudinal-atomic-nexus-card-update` | Change-set schema |
+| Standalone host adapter | `longitudinal-standalone-file-adapter` | Bayram skill/host separation and `scripts/hypothesis_state.py` |
+| Robin persistence handoff | `longitudinal-robin-persistence-handoff` | Robin embedded contract and persistence receipt |
+| Immutable terminal history | `longitudinal-terminal-record-immutable` | Versioned state and append-only evidence contract |
+| Post-release outcome continuity | `longitudinal-post-release-outcome` | Append-only `outcome_log` and immutable terminal result |
+| Owner transition without impersonation | `longitudinal-owner-transition-resolution` | Typed pending-request resolution and owner-tenure history |
+| Nexus decision authority | `longitudinal-nexus-decision-without-authority` | Exact subject hash, owner tenure, decision scope and receipt |
+| Current upstream authority | `longitudinal-stale-upstream-authority` | Unsuperseded supported evidence and Nexus lineage |
 
 ## Important source adaptations
 
@@ -136,6 +188,11 @@ cannot recreate those mechanisms. `standalone-enforcement-boundary` therefore
 checks honest status language: static validation is `script-checked`; behavior
 is `instruction-supported`; live source, approval, trace, receipt, and outcome
 proof are `host-required` or `not-supported-standalone`.
+
+The `private-memory-refusal` case forbids the skill from inventing or silently
+owning private memory. It does not forbid an authorized host from persisting the
+portable contract outside the package. The standalone file-adapter case is the
+positive control for that distinction.
 
 The source repository has structural activation checks, but no complete
 standalone activation behavior suite for all positive and negative examples in

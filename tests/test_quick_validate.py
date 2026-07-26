@@ -86,6 +86,123 @@ class QuickValidateRegressionTests(unittest.TestCase):
             result.errors,
         )
 
+    def test_missing_longitudinal_invariant_mapping_fails_closed(self) -> None:
+        invariant = "L7-host-adapters-preserve-portability"
+        removed = quick_validate.LONGITUDINAL_INVARIANT_CASES.pop(invariant)
+        try:
+            result = run_validation(PACKAGE_ROOT)
+        finally:
+            quick_validate.LONGITUDINAL_INVARIANT_CASES[invariant] = removed
+
+        self.assertTrue(
+            any(
+                "missing longitudinal invariant mappings" in error
+                for error in result.errors
+            ),
+            result.errors,
+        )
+
+    def test_invalid_state_schema_fails_closed(self) -> None:
+        temporary, candidate = self.copy_candidate()
+        self.addCleanup(temporary.cleanup)
+        schema_path = (
+            candidate
+            / "assets"
+            / "hypothesis-change-set.schema.json"
+        )
+        schema_path.write_text("{}\n", encoding="utf-8")
+
+        result = run_validation(candidate)
+
+        self.assertTrue(
+            any(
+                "hypothesis-change-set.schema.json" in error
+                and (
+                    "must declare JSON Schema 2020-12" in error
+                    or "missing contract tokens" in error
+                )
+                for error in result.errors
+            ),
+            result.errors,
+        )
+
+    def test_missing_lifecycle_scenario_fails_closed(self) -> None:
+        temporary, candidate = self.copy_candidate()
+        self.addCleanup(temporary.cleanup)
+        (
+            candidate
+            / "evals"
+            / "lifecycle"
+            / "version-conflict-reload.json"
+        ).unlink()
+
+        result = run_validation(candidate)
+
+        self.assertTrue(
+            any(
+                "lifecycle eval inventory missing required IDs" in error
+                for error in result.errors
+            ),
+            result.errors,
+        )
+
+    def test_lifecycle_turn_must_be_fresh_context(self) -> None:
+        temporary, candidate = self.copy_candidate()
+        self.addCleanup(temporary.cleanup)
+        scenario_path = (
+            candidate
+            / "evals"
+            / "lifecycle"
+            / "resume-after-accepted-receipt.json"
+        )
+        scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+        scenario["turns"][1]["fresh_context"] = False
+        scenario_path.write_text(
+            json.dumps(scenario, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+        result = run_validation(candidate)
+
+        self.assertTrue(
+            any("fresh_context must be true" in error for error in result.errors),
+            result.errors,
+        )
+
+    def test_ci_workflow_requires_pinned_dependency_free_actions(self) -> None:
+        temporary, candidate = self.copy_candidate()
+        self.addCleanup(temporary.cleanup)
+        workflow_path = candidate / ".github" / "workflows" / "validate.yml"
+        workflow = workflow_path.read_text(encoding="utf-8")
+        workflow = workflow.replace(
+            "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "actions/checkout@v7",
+        )
+        workflow = workflow.replace(
+            "      - name: Validate portable skill package\n",
+            "      - name: Injected dependency negative control\n"
+            "        run: python -m pip install unpinned-package\n"
+            "      - name: Validate portable skill package\n",
+        )
+        workflow_path.write_text(workflow, encoding="utf-8")
+
+        result = run_validation(candidate)
+
+        self.assertTrue(
+            any(
+                "remote action must use a full commit SHA" in error
+                for error in result.errors
+            ),
+            result.errors,
+        )
+        self.assertTrue(
+            any(
+                "validation CI must remain dependency-free" in error
+                for error in result.errors
+            ),
+            result.errors,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

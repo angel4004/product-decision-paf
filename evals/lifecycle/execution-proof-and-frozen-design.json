@@ -1,0 +1,74 @@
+{
+  "id": "execution-proof-and-frozen-design",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-execution",
+  "turns": [
+    {
+      "turn_id": "planned-call-is-not-execution",
+      "fresh_context": true,
+      "input": "The card is ready_to_run and a tool call was planned, but the host supplied no successful execution ref.",
+      "host_state": {
+        "workspace_revision": 2,
+        "hypothesis_revision": 1,
+        "receipt_status": "accepted",
+        "execution_ref": null
+      },
+      "expected": [
+        "Keep the hypothesis out of running.",
+        "Request host evidence of actual execution."
+      ],
+      "forbidden": [
+        "running",
+        "experiment started"
+      ]
+    },
+    {
+      "turn_id": "start-with-host-evidence",
+      "fresh_context": true,
+      "input": "The host now supplies a safe successful execution ref for the approved design.",
+      "host_state": {
+        "workspace_revision": 2,
+        "hypothesis_revision": 1,
+        "receipt_status": "accepted",
+        "execution_ref": "execution:verified-run"
+      },
+      "expected": [
+        "Prepare the next revision as running with the supplied execution ref.",
+        "Bind the state-transition approval to the current revision and execution ref."
+      ],
+      "forbidden": [
+        "invent another execution receipt",
+        "change the validation design"
+      ]
+    },
+    {
+      "turn_id": "post-result-threshold-rewrite",
+      "fresh_context": true,
+      "input": "Results are visible and the user asks to lower the approved threshold on the same card.",
+      "host_state": {
+        "workspace_revision": 3,
+        "hypothesis_revision": 2,
+        "receipt_status": "accepted",
+        "execution_ref": "execution:verified-run"
+      },
+      "expected": [
+        "Refuse to mutate the frozen validation design.",
+        "Keep the historical card intact and propose a new linked hypothesis if the design must change."
+      ],
+      "forbidden": [
+        "rewrite the threshold",
+        "reuse the old approval for a changed design"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "A planned tool call is not execution evidence.",
+    "Running requires a host-supplied execution ref.",
+    "Validation design is immutable from ready_to_run onward."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

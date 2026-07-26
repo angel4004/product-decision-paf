@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/angel4004/product-decision-paf/schemas/hypothesis-change-set.schema.json",
+  "title": "Product Decision PAF Hypothesis Change Set",
+  "description": "Atomic persistence proposal for a versioned hypothesis workspace. A change set is not proof that persistence occurred.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_policy",
+    "persistence_intent",
+    "change_set_id",
+    "request_id",
+    "workspace_id",
+    "created_at",
+    "workspace_operation",
+    "expected_workspace_revision",
+    "candidate_workspace_revision",
+    "candidate_state",
+    "change_manifest",
+    "required_owner_approvals",
+    "enforcement_boundary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "product-decision-paf/hypothesis-change-set/v1"
+    },
+    "data_policy": {
+      "const": "safe_refs_and_summaries_only"
+    },
+    "persistence_intent": {
+      "const": "proposal"
+    },
+    "change_set_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "request_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "workspace_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "workspace_operation": {
+      "enum": [
+        "create",
+        "replace"
+      ]
+    },
+    "expected_workspace_revision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "candidate_workspace_revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "candidate_state": {
+      "$ref": "hypothesis-workspace-state.schema.json"
+    },
+    "change_manifest": {
+      "$ref": "#/$defs/changeManifest"
+    },
+    "required_owner_approvals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/requiredOwnerApproval"
+      }
+    },
+    "enforcement_boundary": {
+      "$ref": "#/$defs/enforcementBoundary"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "workspace_operation": {
+            "const": "create"
+          }
+        },
+        "required": [
+          "workspace_operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expected_workspace_revision": {
+            "type": "null"
+          },
+          "candidate_workspace_revision": {
+            "const": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "expected_workspace_revision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "candidate_workspace_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hypothesisCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hypothesis_id",
+        "candidate_revision"
+      ],
+      "properties": {
+        "hypothesis_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "candidate_revision": {
+          "const": 0
+        }
+      }
+    },
+    "hypothesisUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hypothesis_id",
+        "expected_revision",
+        "candidate_revision",
+        "from_state",
+        "to_state"
+      ],
+      "properties": {
+        "hypothesis_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "candidate_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "from_state": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/lifecycleState"
+        },
+        "to_state": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/lifecycleState"
+        }
+      }
+    },
+    "focusChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "anyOf": [
+            {
+              "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            {
+              "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "changeManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hypothesis_creates",
+        "hypothesis_updates",
+        "appended_decision_scope_ids",
+        "appended_owner_tenure_ids",
+        "appended_nexus_entry_ids",
+        "appended_evidence_ids",
+        "appended_claim_event_ids",
+        "appended_outcome_event_ids",
+        "new_owner_approval_ids",
+        "focus_change",
+        "base_change"
+      ],
+      "properties": {
+        "hypothesis_creates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hypothesisCreate"
+          }
+        },
+        "hypothesis_updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hypothesisUpdate"
+          }
+        },
+        "appended_decision_scope_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "appended_owner_tenure_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "appended_nexus_entry_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "appended_evidence_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "appended_claim_event_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "appended_outcome_event_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "new_owner_approval_ids": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/idList"
+        },
+        "focus_change": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/focusChange"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "base_change": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/baseChange"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "baseChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "anyOf": [
+            {
+              "enum": [
+                "null_base",
+                "data_base"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to": {
+          "enum": [
+            "null_base",
+            "data_base"
+          ]
+        }
+      }
+    },
+    "requiredOwnerApproval": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/pendingOwnerApproval"
+    },
+    "enforcementBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reasoning",
+        "persistence",
+        "external_effect"
+      ],
+      "properties": {
+        "reasoning": {
+          "const": "instruction_supported"
+        },
+        "persistence": {
+          "const": "host_required"
+        },
+        "external_effect": {
+          "enum": [
+            "host_required",
+            "not_supported_standalone"
+          ]
+        }
+      }
+    }
+  }
+}

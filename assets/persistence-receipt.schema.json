@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/angel4004/product-decision-paf/schemas/persistence-receipt.schema.json",
+  "title": "Product Decision PAF Persistence Receipt",
+  "description": "Safe receipt for an adapter handling a hypothesis change set. Only accepted status proves persistence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_policy",
+    "durability_scope",
+    "receipt_id",
+    "change_set_id",
+    "change_set_sha256",
+    "workspace_id",
+    "status",
+    "adapter",
+    "adapter_ref",
+    "attempted_at",
+    "persisted_at",
+    "expected_workspace_revision",
+    "observed_workspace_revision",
+    "new_workspace_revision",
+    "state_sha256",
+    "storage_ref",
+    "approval_refs",
+    "validation",
+    "safe_error"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "product-decision-paf/persistence-receipt/v1"
+    },
+    "data_policy": {
+      "const": "safe_refs_and_summaries_only"
+    },
+    "durability_scope": {
+      "const": "atomic_replace_with_readback_power_loss_host_dependent"
+    },
+    "receipt_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "change_set_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "change_set_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "workspace_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "status": {
+      "enum": [
+        "accepted",
+        "rejected",
+        "conflict",
+        "failed"
+      ]
+    },
+    "adapter": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "adapter_ref": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/safeRef"
+    },
+    "attempted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "persisted_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_workspace_revision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "observed_workspace_revision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "new_workspace_revision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "state_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "storage_ref": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/nullableSafeRef"
+    },
+    "approval_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "hypothesis-workspace-state.schema.json#/$defs/safeRef"
+      },
+      "uniqueItems": true
+    },
+    "validation": {
+      "$ref": "#/$defs/validationResults"
+    },
+    "safe_error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/safeError"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "accepted"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "persisted_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "new_workspace_revision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "state_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "storage_ref": {
+            "$ref": "hypothesis-workspace-state.schema.json#/$defs/safeRef"
+          },
+          "validation": {
+            "properties": {
+              "schema_valid": {
+                "const": true
+              },
+              "semantic_valid": {
+                "const": true
+              },
+              "concurrency_valid": {
+                "const": true
+              },
+              "append_only_valid": {
+                "const": true
+              },
+              "transition_valid": {
+                "const": true
+              },
+              "owner_approval_bindings_valid": {
+                "const": true
+              },
+              "history_chain_valid": {
+                "const": true
+              },
+              "sensitive_data_scan_passed": {
+                "const": true
+              },
+              "atomic_replace_protocol_used": {
+                "const": true
+              }
+            }
+          },
+          "safe_error": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "persisted_at": {
+            "type": "null"
+          },
+          "new_workspace_revision": {
+            "type": "null"
+          },
+          "state_sha256": {
+            "type": "null"
+          },
+          "storage_ref": {
+            "type": "null"
+          },
+          "safe_error": {
+            "$ref": "#/$defs/safeError"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "validationResults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_valid",
+        "semantic_valid",
+        "concurrency_valid",
+        "append_only_valid",
+        "transition_valid",
+        "owner_approval_bindings_valid",
+        "history_chain_valid",
+        "sensitive_data_scan_passed",
+        "atomic_replace_protocol_used"
+      ],
+      "properties": {
+        "schema_valid": {
+          "type": "boolean"
+        },
+        "semantic_valid": {
+          "type": "boolean"
+        },
+        "concurrency_valid": {
+          "type": "boolean"
+        },
+        "append_only_valid": {
+          "type": "boolean"
+        },
+        "transition_valid": {
+          "type": "boolean"
+        },
+        "owner_approval_bindings_valid": {
+          "type": "boolean"
+        },
+        "history_chain_valid": {
+          "type": "boolean"
+        },
+        "sensitive_data_scan_passed": {
+          "type": "boolean"
+        },
+        "atomic_replace_protocol_used": {
+          "type": "boolean"
+        }
+      }
+    },
+    "safeError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "minLength": 3,
+          "maxLength": 64
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

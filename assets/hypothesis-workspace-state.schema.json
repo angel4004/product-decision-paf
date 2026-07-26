@@ -1,0 +1,1599 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/angel4004/product-decision-paf/schemas/hypothesis-workspace-state.schema.json",
+  "title": "Product Decision PAF Hypothesis Workspace State",
+  "description": "One portable workspace snapshot for a product Nexus and versioned PAF hypothesis records. Contains safe summaries and references only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_policy",
+    "workspace_id",
+    "product_ref",
+    "revision",
+    "revision_chain_head_sha256",
+    "as_of",
+    "decision_owner_ref",
+    "owner_tenure_log",
+    "active_owner_tenure_id",
+    "goal",
+    "decision_scope_log",
+    "active_decision_scope_id",
+    "base",
+    "nexus_entries",
+    "evidence_log",
+    "claim_log",
+    "outcome_log",
+    "focus_hypothesis_id",
+    "hypotheses",
+    "last_persistence_receipt_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "product-decision-paf/hypothesis-workspace-state/v1"
+    },
+    "data_policy": {
+      "const": "safe_refs_and_summaries_only"
+    },
+    "workspace_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "product_ref": {
+      "$ref": "#/$defs/safeRef"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "revision_chain_head_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decision_owner_ref": {
+      "$ref": "#/$defs/safeRef"
+    },
+    "owner_tenure_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ownerTenure"
+      },
+      "minItems": 1
+    },
+    "active_owner_tenure_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "goal": {
+      "$ref": "#/$defs/goal"
+    },
+    "decision_scope_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decisionScope"
+      },
+      "minItems": 1
+    },
+    "active_decision_scope_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "base": {
+      "enum": [
+        "null_base",
+        "data_base"
+      ]
+    },
+    "nexus_entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nexusEntry"
+      }
+    },
+    "evidence_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceEntry"
+      }
+    },
+    "claim_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claimEvent"
+      }
+    },
+    "outcome_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/outcomeEvent"
+      }
+    },
+    "focus_hypothesis_id": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/stableId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hypothesisRecord"
+      }
+    },
+    "last_persistence_receipt_ref": {
+      "$ref": "#/$defs/nullableSafeRef"
+    }
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 96
+    },
+    "safeRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/#-]*$",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "nullableSafeRef": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/safeRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "boundedText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "nullableText": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/boundedText"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/boundedText"
+      },
+      "uniqueItems": true
+    },
+    "idList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stableId"
+      },
+      "uniqueItems": true
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor",
+        "outcome",
+        "baseline",
+        "target",
+        "period",
+        "decision_to_unlock"
+      ],
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "outcome": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "baseline": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "target": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "period": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "decision_to_unlock": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "decisionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "sequence",
+        "opened_at",
+        "opened_workspace_revision",
+        "goal",
+        "predecessor_scope_id",
+        "transition_receipt_ref",
+        "reason"
+      ],
+      "properties": {
+        "scope_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "opened_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "opened_workspace_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "goal": {
+          "$ref": "#/$defs/goal"
+        },
+        "predecessor_scope_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transition_receipt_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "reason": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "ownerTenure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tenure_id",
+        "sequence",
+        "effective_at",
+        "effective_workspace_revision",
+        "owner_ref",
+        "predecessor_tenure_id",
+        "transition_receipt_ref",
+        "reason"
+      ],
+      "properties": {
+        "tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effective_workspace_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "predecessor_tenure_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transition_receipt_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "reason": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "evidenceStatus": {
+      "enum": [
+        "supported",
+        "partial",
+        "contradictory",
+        "stale",
+        "missing",
+        "not_applicable"
+      ]
+    },
+    "decisionAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner_ref",
+        "owner_tenure_id",
+        "decision_scope_id",
+        "decided_at",
+        "reversibility",
+        "safe_receipt_ref",
+        "subject_sha256"
+      ],
+      "properties": {
+        "owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "owner_tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "decision_scope_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reversibility": {
+          "enum": [
+            "reversible",
+            "irreversible"
+          ]
+        },
+        "safe_receipt_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "nexusEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entry_id",
+        "sequence",
+        "kind",
+        "decision_authority",
+        "statement",
+        "evidence_ids",
+        "supersedes_entry_ids",
+        "status",
+        "valid_as_of"
+      ],
+      "properties": {
+        "entry_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "kind": {
+          "enum": [
+            "fact",
+            "interpretation",
+            "decision",
+            "unknown"
+          ]
+        },
+        "decision_authority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/decisionAuthority"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "statement": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "supersedes_entry_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "valid_as_of": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "decision"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "decision_authority": {
+                "$ref": "#/$defs/decisionAuthority"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "decision_authority": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "observationPeriod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "canonicalDecimal": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]*|-[1-9][0-9]*|0\\.[0-9]*[1-9]|-0\\.[0-9]*[1-9]|[1-9][0-9]*\\.[0-9]*[1-9]|-[1-9][0-9]*\\.[0-9]*[1-9])$"
+    },
+    "nullableDecimal": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/canonicalDecimal"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidenceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "sequence",
+        "recorded_at",
+        "claim_refs",
+        "source_ref",
+        "observation_period",
+        "method",
+        "segment",
+        "numerator",
+        "denominator",
+        "filters",
+        "exclusions",
+        "summary",
+        "status",
+        "supersedes_evidence_ids",
+        "content_policy"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "claim_refs": {
+          "$ref": "#/$defs/idList"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "observation_period": {
+          "$ref": "#/$defs/observationPeriod"
+        },
+        "method": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "segment": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "numerator": {
+          "$ref": "#/$defs/nullableDecimal"
+        },
+        "denominator": {
+          "$ref": "#/$defs/nullableDecimal"
+        },
+        "filters": {
+          "$ref": "#/$defs/stringList"
+        },
+        "exclusions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "summary": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "supersedes_evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "content_policy": {
+          "const": "safe_summary_only"
+        }
+      }
+    },
+    "claimEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "claim_id",
+        "sequence",
+        "recorded_at",
+        "status",
+        "resolution",
+        "claim",
+        "reason",
+        "required_evidence",
+        "resolution_evidence_ids",
+        "supersedes_event_ids"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "claim_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "blocked",
+            "resolved"
+          ]
+        },
+        "resolution": {
+          "anyOf": [
+            {
+              "enum": [
+                "supported",
+                "withdrawn"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "claim": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "reason": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "required_evidence": {
+          "$ref": "#/$defs/stringList"
+        },
+        "resolution_evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "supersedes_event_ids": {
+          "$ref": "#/$defs/idList"
+        }
+      }
+    },
+    "outcomeEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "sequence",
+        "recorded_at",
+        "hypothesis_id",
+        "decision_scope_id",
+        "status",
+        "evidence_ids",
+        "summary",
+        "attribution_note",
+        "host_receipt_ref",
+        "supersedes_event_ids"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "hypothesis_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "decision_scope_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "status": {
+          "enum": [
+            "observed",
+            "attribution_limited",
+            "verified",
+            "withdrawn"
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "summary": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "attribution_note": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "host_receipt_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "supersedes_event_ids": {
+          "$ref": "#/$defs/idList"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "host_receipt_ref": {
+                "$ref": "#/$defs/safeRef"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "host_receipt_ref": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "hypothesisClass": {
+      "enum": [
+        "customer_need",
+        "value_proposition",
+        "solution",
+        "business_model"
+      ]
+    },
+    "lifecycleContext": {
+      "enum": [
+        "discovery",
+        "acquisition_activation",
+        "onboarding",
+        "go_to_market",
+        "adoption",
+        "post_release_impact"
+      ]
+    },
+    "lifecycleState": {
+      "enum": [
+        "framing",
+        "blocked_upstream",
+        "awaiting_owner_rule",
+        "ready_to_run",
+        "running",
+        "ready_for_review",
+        "closed",
+        "cancelled",
+        "superseded"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "pending",
+        "confirmed",
+        "disconfirmed",
+        "unresolved",
+        "not_run"
+      ]
+    },
+    "upstreamDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependency_id",
+        "mode",
+        "co_test_plan_ref",
+        "hypothesis_id",
+        "required_class",
+        "evidence_status",
+        "evidence_ids"
+      ],
+      "properties": {
+        "dependency_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "mode": {
+          "enum": [
+            "prerequisite",
+            "co_test"
+          ]
+        },
+        "co_test_plan_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "hypothesis_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "required_class": {
+          "$ref": "#/$defs/hypothesisClass"
+        },
+        "evidence_status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/idList"
+        }
+      }
+    },
+    "criterionProvenance": {
+      "enum": [
+        "owner_supplied",
+        "evidence_derived",
+        "proposed_assumption",
+        "unset"
+      ]
+    },
+    "approvalStatus": {
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric_id",
+        "role",
+        "definition",
+        "numerator",
+        "denominator",
+        "segment",
+        "baseline",
+        "criterion",
+        "criterion_provenance",
+        "approval_status",
+        "rationale"
+      ],
+      "properties": {
+        "metric_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "role": {
+          "enum": [
+            "primary",
+            "guardrail",
+            "diagnostic"
+          ]
+        },
+        "definition": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "numerator": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "denominator": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "segment": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "baseline": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "criterion": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "criterion_provenance": {
+          "$ref": "#/$defs/criterionProvenance"
+        },
+        "approval_status": {
+          "$ref": "#/$defs/approvalStatus"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nullableText"
+        }
+      }
+    },
+    "sampleDesign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population",
+        "target_size",
+        "inclusion",
+        "exclusion",
+        "rationale",
+        "provenance",
+        "approval_status"
+      ],
+      "properties": {
+        "population": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "target_size": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inclusion": {
+          "$ref": "#/$defs/stringList"
+        },
+        "exclusion": {
+          "$ref": "#/$defs/stringList"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "provenance": {
+          "$ref": "#/$defs/criterionProvenance"
+        },
+        "approval_status": {
+          "$ref": "#/$defs/approvalStatus"
+        }
+      }
+    },
+    "timeWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definition",
+        "rationale",
+        "provenance",
+        "approval_status"
+      ],
+      "properties": {
+        "definition": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "rationale": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "provenance": {
+          "$ref": "#/$defs/criterionProvenance"
+        },
+        "approval_status": {
+          "$ref": "#/$defs/approvalStatus"
+        }
+      }
+    },
+    "ownerApprovalScope": {
+      "enum": [
+        "decision_rule",
+        "proposed_assumption",
+        "state_transition",
+        "terminal_verdict"
+      ]
+    },
+    "ownerApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "scope",
+        "owner_ref",
+        "owner_tenure_id",
+        "subject_revision",
+        "subject_sha256",
+        "decision",
+        "decided_at",
+        "safe_receipt_ref"
+      ],
+      "properties": {
+        "approval_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "scope": {
+          "$ref": "#/$defs/ownerApprovalScope"
+        },
+        "owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "owner_tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ]
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "safe_receipt_ref": {
+          "$ref": "#/$defs/safeRef"
+        }
+      }
+    },
+    "pendingOwnerApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_scope",
+        "hypothesis_id",
+        "owner_ref",
+        "owner_tenure_id",
+        "subject_revision",
+        "subject_sha256",
+        "reason",
+        "source_change_set_id"
+      ],
+      "properties": {
+        "approval_scope": {
+          "enum": [
+            "decision_rule",
+            "proposed_assumption"
+          ]
+        },
+        "hypothesis_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "owner_tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "reason": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "source_change_set_id": {
+          "$ref": "#/$defs/stableId"
+        }
+      }
+    },
+    "pendingOwnerResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolution_id",
+        "resolved_at",
+        "hypothesis_id",
+        "approval_scope",
+        "request_owner_tenure_id",
+        "subject_revision",
+        "subject_sha256",
+        "resolution",
+        "authority_owner_ref",
+        "authority_tenure_id",
+        "safe_receipt_ref",
+        "reason"
+      ],
+      "properties": {
+        "resolution_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "resolved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "hypothesis_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "approval_scope": {
+          "$ref": "#/$defs/ownerApprovalScope"
+        },
+        "request_owner_tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "subject_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "resolution": {
+          "enum": [
+            "withdrawn",
+            "invalidated_by_tenure_transition"
+          ]
+        },
+        "authority_owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "authority_tenure_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "safe_receipt_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "reason": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "decisionRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "if_confirmed",
+        "if_disconfirmed",
+        "if_unresolved"
+      ],
+      "properties": {
+        "if_confirmed": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "if_disconfirmed": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "if_unresolved": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "validationDesign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "conditions",
+        "metrics",
+        "sample",
+        "time_window",
+        "validity_threats",
+        "decision_rules"
+      ],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "conditions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metric"
+          }
+        },
+        "sample": {
+          "$ref": "#/$defs/sampleDesign"
+        },
+        "time_window": {
+          "$ref": "#/$defs/timeWindow"
+        },
+        "validity_threats": {
+          "$ref": "#/$defs/stringList"
+        },
+        "decision_rules": {
+          "$ref": "#/$defs/decisionRules"
+        }
+      }
+    },
+    "metricResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric_id",
+        "evidence_ids",
+        "observation_period",
+        "observed_summary",
+        "actual_numerator",
+        "actual_denominator",
+        "actual_sample_size",
+        "criterion_evaluation",
+        "validity_status"
+      ],
+      "properties": {
+        "metric_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "observation_period": {
+          "$ref": "#/$defs/observationPeriod"
+        },
+        "observed_summary": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "actual_numerator": {
+          "$ref": "#/$defs/nullableDecimal"
+        },
+        "actual_denominator": {
+          "$ref": "#/$defs/nullableDecimal"
+        },
+        "actual_sample_size": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "criterion_evaluation": {
+          "enum": [
+            "met",
+            "not_met",
+            "indeterminate"
+          ]
+        },
+        "validity_status": {
+          "enum": [
+            "adequate",
+            "limited",
+            "invalid"
+          ]
+        }
+      }
+    },
+    "result": {
+      "description": "Closure-time result snapshot. The append-only outcome_log is authoritative for later post-release outcome assertions and revisions.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observations",
+        "interpretation",
+        "validity_status",
+        "metric_results",
+        "new_nexus_entry_ids",
+        "external_outcome_status",
+        "outcome_evidence_ids",
+        "external_outcome_receipt_ref",
+        "decision_taken",
+        "decision_owner_acceptance_ref"
+      ],
+      "properties": {
+        "observations": {
+          "$ref": "#/$defs/stringList"
+        },
+        "interpretation": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "validity_status": {
+          "enum": [
+            "adequate",
+            "limited",
+            "invalid",
+            "not_reviewed"
+          ]
+        },
+        "metric_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metricResult"
+          }
+        },
+        "new_nexus_entry_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "external_outcome_status": {
+          "enum": [
+            "not_verified",
+            "observed",
+            "attribution_limited",
+            "verified"
+          ]
+        },
+        "outcome_evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "external_outcome_receipt_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "decision_taken": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "decision_owner_acceptance_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        }
+      }
+    },
+    "nextStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "owner_ref",
+        "expected_evidence",
+        "pass_rule",
+        "fail_rule"
+      ],
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "owner_ref": {
+          "$ref": "#/$defs/safeRef"
+        },
+        "expected_evidence": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "pass_rule": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "fail_rule": {
+          "$ref": "#/$defs/boundedText"
+        }
+      }
+    },
+    "relations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "based_on_hypothesis_ids",
+        "replaces_hypothesis_id"
+      ],
+      "properties": {
+        "based_on_hypothesis_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "replaces_hypothesis_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/stableId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "hypothesisRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hypothesis_id",
+        "decision_scope_id",
+        "revision",
+        "created_at",
+        "updated_at",
+        "state",
+        "verdict",
+        "execution_ref",
+        "origin",
+        "hypothesis_class",
+        "lifecycle_context",
+        "statement",
+        "segment",
+        "situation",
+        "rationale",
+        "upstream_dependencies",
+        "validation",
+        "owner_approvals",
+        "pending_owner_approvals",
+        "pending_owner_resolutions",
+        "evidence_ids",
+        "result",
+        "next_step",
+        "relations"
+      ],
+      "properties": {
+        "hypothesis_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "decision_scope_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "$ref": "#/$defs/lifecycleState"
+        },
+        "verdict": {
+          "$ref": "#/$defs/verdict"
+        },
+        "execution_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "origin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason",
+            "nexus_revision",
+            "originating_entry_ids",
+            "decision_to_unlock"
+          ],
+          "properties": {
+            "reason": {
+              "$ref": "#/$defs/boundedText"
+            },
+            "nexus_revision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "originating_entry_ids": {
+              "$ref": "#/$defs/idList"
+            },
+            "decision_to_unlock": {
+              "$ref": "#/$defs/boundedText"
+            }
+          }
+        },
+        "hypothesis_class": {
+          "$ref": "#/$defs/hypothesisClass"
+        },
+        "lifecycle_context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycleContext"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "statement": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "segment": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "situation": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "rationale": {
+          "$ref": "#/$defs/boundedText"
+        },
+        "upstream_dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/upstreamDependency"
+          }
+        },
+        "validation": {
+          "$ref": "#/$defs/validationDesign"
+        },
+        "owner_approvals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ownerApproval"
+          }
+        },
+        "pending_owner_approvals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pendingOwnerApproval"
+          }
+        },
+        "pending_owner_resolutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pendingOwnerResolution"
+          }
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "result": {
+          "$ref": "#/$defs/result"
+        },
+        "next_step": {
+          "$ref": "#/$defs/nextStep"
+        },
+        "relations": {
+          "$ref": "#/$defs/relations"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "closed"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "verdict": {
+                "enum": [
+                  "confirmed",
+                  "disconfirmed",
+                  "unresolved"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "cancelled",
+                  "superseded"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "verdict": {
+                "const": "not_run"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "framing",
+                  "blocked_upstream",
+                  "awaiting_owner_rule",
+                  "ready_to_run",
+                  "running",
+                  "ready_for_review"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "verdict": {
+                "const": "pending"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

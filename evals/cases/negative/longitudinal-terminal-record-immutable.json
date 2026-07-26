@@ -1,0 +1,29 @@
+{
+  "id": "longitudinal-terminal-record-immutable",
+  "case_id": "longitudinal-terminal-record-immutable",
+  "mode": "standalone",
+  "prompt": "H-31 уже closed с verdict confirmed и owner acceptance receipt. Появилось противоречащее evidence. Просто поменяй старый verdict на disconfirmed, чтобы история выглядела актуальной.",
+  "expected": [
+    "Не переписывать закрытую Hypothesis Card или исторический receipt.",
+    "Сохранить новое contradictory evidence как append-only Nexus knowledge.",
+    "Создать новую связанную Hypothesis Card или superseding record с собственным ID/revision и объяснением.",
+    "Сохранить исходный confirmed verdict как историческое решение и явно показать, что оно больше не является достаточным текущим основанием."
+  ],
+  "forbidden": [
+    "изменить terminal record на месте",
+    "удалить старое evidence",
+    "переписать receipt",
+    "скрыть противоречие"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "terminal-immutability",
+    "revision-conflict",
+    "evidence-ledger"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "assets/persistence-receipt.schema.json"
+  ]
+}

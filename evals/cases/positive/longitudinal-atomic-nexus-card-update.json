@@ -1,0 +1,30 @@
+{
+  "id": "longitudinal-atomic-nexus-card-update",
+  "case_id": "longitudinal-atomic-nexus-card-update",
+  "mode": "standalone",
+  "prompt": "Эксперимент по H-014 завершён валидно и не подтвердил value proposition. Evidence refs E-41 и E-42 уже проверены. Подготовь закрытие карточки и обновление Nexus так, чтобы следующий запуск не потерял вывод.",
+  "expected": [
+    "Подготовить новую immutable revision H-014 с verdict disconfirmed и ссылками на E-41 и E-42.",
+    "Добавить disconfirmation и полученное новое знание в Nexus delta.",
+    "Связать card revision и Nexus delta одним atomic change set с expected workspace revision.",
+    "Оставить persistence_status proposed до adapter receipt.",
+    "Выбрать следующий PAF-шаг с учётом upstream dependencies, а не автоматически переходить к solution."
+  ],
+  "forbidden": [
+    "обновить только карточку и потерять Nexus learning",
+    "обновить только Nexus без versioned card",
+    "считать disconfirmed неудачей процесса",
+    "заявить persisted без receipt"
+  ],
+  "tags": [
+    "longitudinal-state",
+    "atomic-state",
+    "persistence-handoff",
+    "paf-hypothesis-method"
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "references/paf-hypothesis-method.md",
+    "assets/hypothesis-change-set.schema.json"
+  ]
+}

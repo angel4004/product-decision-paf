@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/angel4004/product-decision-paf/schemas/hypothesis-proposal-intent.schema.json",
+  "title": "Product Decision PAF Hypothesis Proposal Intent",
+  "description": "Portable, non-committable intent used only while bindings required for a complete hypothesis change set are unresolved.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_policy",
+    "artifact_kind",
+    "intent_id",
+    "request_id",
+    "created_at",
+    "requested_operation",
+    "known_bindings",
+    "requested_change",
+    "unresolved_bindings",
+    "materialization_contract",
+    "commit_eligible",
+    "persistence_status",
+    "enforcement_boundary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "product-decision-paf/hypothesis-proposal-intent/v1"
+    },
+    "data_policy": {
+      "const": "safe_refs_and_summaries_only"
+    },
+    "artifact_kind": {
+      "const": "proposal_intent"
+    },
+    "intent_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "request_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requested_operation": {
+      "enum": [
+        "create",
+        "replace",
+        "undetermined"
+      ]
+    },
+    "known_bindings": {
+      "$ref": "#/$defs/knownBindings"
+    },
+    "requested_change": {
+      "$ref": "#/$defs/requestedChange"
+    },
+    "unresolved_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "workspace_id",
+          "product_ref",
+          "current_workspace_snapshot",
+          "matching_accepted_receipt",
+          "decision_scope",
+          "owner_tenure",
+          "hypothesis_id",
+          "hypothesis_statement",
+          "hypothesis_class",
+          "lifecycle_context",
+          "segment",
+          "validation_design",
+          "write_authority",
+          "state_root_or_host_adapter"
+        ]
+      }
+    },
+    "materialization_contract": {
+      "$ref": "#/$defs/materializationContract"
+    },
+    "commit_eligible": {
+      "const": false
+    },
+    "persistence_status": {
+      "const": "not_persisted"
+    },
+    "enforcement_boundary": {
+      "$ref": "hypothesis-change-set.schema.json#/$defs/enforcementBoundary"
+    }
+  },
+  "$defs": {
+    "nullableStableId": {
+      "anyOf": [
+        {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullableSafeRef": {
+      "anyOf": [
+        {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/safeRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullableRevision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "knownBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "product_ref",
+        "hypothesis_id",
+        "decision_scope_id",
+        "owner_tenure_id",
+        "expected_workspace_revision",
+        "candidate_workspace_revision",
+        "current_workspace_snapshot_ref",
+        "matching_accepted_receipt_ref",
+        "write_authority",
+        "state_root_or_host_adapter_ref"
+      ],
+      "properties": {
+        "workspace_id": {
+          "$ref": "#/$defs/nullableStableId"
+        },
+        "product_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "hypothesis_id": {
+          "$ref": "#/$defs/nullableStableId"
+        },
+        "decision_scope_id": {
+          "$ref": "#/$defs/nullableStableId"
+        },
+        "owner_tenure_id": {
+          "$ref": "#/$defs/nullableStableId"
+        },
+        "expected_workspace_revision": {
+          "$ref": "#/$defs/nullableRevision"
+        },
+        "candidate_workspace_revision": {
+          "$ref": "#/$defs/nullableRevision"
+        },
+        "current_workspace_snapshot_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "matching_accepted_receipt_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        },
+        "write_authority": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state_root_or_host_adapter_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        }
+      }
+    },
+    "requestedChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "requested_hypothesis_label",
+        "hypothesis_statement",
+        "target_state",
+        "hypothesis_class",
+        "lifecycle_context",
+        "segment",
+        "validation_design_ref"
+      ],
+      "properties": {
+        "summary": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/boundedText"
+        },
+        "requested_hypothesis_label": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/boundedText"
+        },
+        "hypothesis_statement": {
+          "anyOf": [
+            {
+              "$ref": "hypothesis-workspace-state.schema.json#/$defs/boundedText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_state": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/lifecycleState"
+        },
+        "hypothesis_class": {
+          "anyOf": [
+            {
+              "$ref": "hypothesis-workspace-state.schema.json#/$defs/hypothesisClass"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lifecycle_context": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "hypothesis-workspace-state.schema.json#/$defs/lifecycleContext"
+          }
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "$ref": "hypothesis-workspace-state.schema.json#/$defs/boundedText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validation_design_ref": {
+          "$ref": "#/$defs/nullableSafeRef"
+        }
+      }
+    },
+    "materializationContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "must_resolve_all_bindings",
+        "full_candidate_state_required",
+        "exact_change_manifest_required",
+        "adapter_accepts_this_artifact",
+        "required_to_commit",
+        "required_for_future_resume",
+        "next_step"
+      ],
+      "properties": {
+        "must_resolve_all_bindings": {
+          "const": true
+        },
+        "full_candidate_state_required": {
+          "const": true
+        },
+        "exact_change_manifest_required": {
+          "const": true
+        },
+        "adapter_accepts_this_artifact": {
+          "const": false
+        },
+        "required_to_commit": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "resolved_bindings",
+              "schema_valid_change_set",
+              "authorized_host_adapter",
+              "write_authority",
+              "explicit_state_root"
+            ]
+          }
+        },
+        "required_for_future_resume": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "accepted_workspace_snapshot",
+              "matching_accepted_receipt"
+            ]
+          }
+        },
+        "next_step": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/boundedText"
+        }
+      }
+    }
+  }
+}

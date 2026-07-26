@@ -1,0 +1,55 @@
+{
+  "id": "append-only-evidence-correction",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-correction",
+  "turns": [
+    {
+      "turn_id": "initial-evidence",
+      "fresh_context": true,
+      "input": "Record the first bounded observation for H-correction.",
+      "host_state": {
+        "workspace_revision": 1,
+        "evidence_ids": [
+          "evidence-original"
+        ]
+      },
+      "expected": [
+        "Keep evidence-original as an immutable log entry."
+      ],
+      "forbidden": [
+        "replace the evidence log"
+      ]
+    },
+    {
+      "turn_id": "correction",
+      "fresh_context": true,
+      "input": "A source correction contradicts the original observation.",
+      "host_state": {
+        "workspace_revision": 2,
+        "evidence_ids": [
+          "evidence-original"
+        ],
+        "new_evidence_id": "evidence-correction"
+      },
+      "expected": [
+        "Append evidence-correction with a greater sequence.",
+        "Set supersedes_evidence_ids to evidence-original while retaining the original.",
+        "Re-evaluate the claim and record contradictory or revised knowledge."
+      ],
+      "forbidden": [
+        "edit evidence-original",
+        "delete evidence-original",
+        "hide the contradiction"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Corrections are append-only and explicitly linked to earlier evidence.",
+    "Historical evidence remains inspectable after the current interpretation changes."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-workspace-state.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

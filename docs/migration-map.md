@@ -56,11 +56,11 @@ no selected software license and must not be described as open source.
 | `workflow-registry.yaml` — state/trace execution | Starts and closes traceable workflows | `host-owned` | `references/enforcement-boundary.md` | `host-required` | Host trace/receipt, if used |
 | `paf-enforcement-matrix.yaml` | Static mapping of critical claims to routes, practices, evals, and hook eligibility | `adapt` | `docs/equivalence-coverage.md`; claim and enforcement references | `deterministic-script` for static coverage; behavior remains host/harness | `quick_validate.py`; forward eval results recorded separately |
 | `memory/MANIFEST.yaml` — curated knowledge routing | Authority, sensitivity, load rules, claim keys | `adapt` | Direct references from `SKILL.md`; no target memory subsystem | `deterministic-script` for reference presence | Validator checks every required reference is directly linked |
-| `memory/MANIFEST.yaml` — local overlays | User/project/session memory and conflict policy | `host-owned` | `references/robin-embedded-mode.md` | `host-required`; unavailable standalone | Eval proves the skill does not persist or mutate memory |
+| `memory/MANIFEST.yaml` — local overlays | User/project/session memory and conflict policy | `host-owned` | `references/robin-embedded-mode.md`; adapter-neutral Nexus/Hypothesis state contract | `host-required`; optional standalone file host | Evals distinguish Nexus domain content from its host-owned persistence |
 | `memory/shared/product-context.md` | Root Copilot JTBD activation and artifact catalogue | `adapt` | `SKILL.md`; `references/routing.md`; target `README.md` | `skill-instruction` | Positive and negative activation cases |
 | `memory/shared/methodology-context.md` | Short PAF/evidence summary and methodology freshness warning | `adapt` | `references/paf-principles.md` with explicit provenance limitation | `human-review` for attribution; otherwise instruction-supported | Primary-source review record |
 | `memory/shared/operating-principles.md` | Privacy, approvals, trace limits, external-write boundaries | `adapt` | `references/claim-boundaries.md`; `references/robin-embedded-mode.md` | Instruction plus host enforcement | Privacy, memory-write, and external-write negative cases |
-| `memory/templates/*` | Local user, project, and working-state templates | `host-owned` | Host-supplied task context; optionally a non-persistent passport asset | `not-supported-standalone` for durable memory | Embedded eval: no memory write |
+| `memory/templates/*` | Local user, project, and working-state templates | `host-owned` | Private templates are not copied; new generic workspace/card schemas define only portable product-decision state | Host owns stored records; reference adapter is explicit and local | Resume, no-store, standalone-adapter, and Robin handoff evals |
 | `workflows/activation/activate-cpo-copilot.md` | Root activation ceremony and JTBD routing | `adapt` | Skill description; `agents/openai.yaml`; `references/routing.md` | Host activation plus skill instruction | Positive and negative activation suite |
 | `workflows/onboarding/create-project-passport.md` — decision procedure | Artifact inventory, goal-first framing, facts/assumptions/gaps, compact passport | `adapt` | `references/workflows.md`; `assets/product-passport-template.md` | `skill-instruction` | Realistic passport eval and goal-first negative control |
 | `workflows/onboarding/create-project-passport.md` — trace calls | Start/close local trace and artifact refs | `host-owned` | Embedded host contract | `host-required` | Current host receipt, not package text |
@@ -86,7 +86,7 @@ no selected software license and must not be described as open source.
 | `tools/check-activation-ux.ps1`, `check-goal-led-ux.ps1`, `check-product-ux-regressions.ps1` | Source-text token checks, not model-output tests | `adapt` | Static coverage checks plus separate behavior evals | Script checks structure only | Never report behavior pass from token presence |
 | `tools/check-paf-enforcement.ps1` | Matrix/reference consistency; calculates hook eligibility | `adapt` | Coverage validation in `quick_validate.py` | Static `script-checked`; runtime `host-required` | Separate `static_contract` from `behavior_eval` result |
 | `tools/check-language.ps1` | Forces Cyrillic across source docs | `drop-with-reason` | `SKILL.md` rule to match user language | `skill-instruction` | Russian activation evals; no repo-wide Cyrillic gate |
-| `tools/check-memory-*.ps1`, `setup-local-workspace.ps1` | Local memory validation and installation | `host-owned` | None inside the skill | `not-supported-standalone` | No-memory-write eval |
+| `tools/check-memory-*.ps1`, `setup-local-workspace.ps1` | Source-specific private memory validation and installation | `drop-with-reason` for source runtime; replace with portable contract | Separate proposal-intent and complete change-set schemas plus the single-bundle `scripts/hypothesis_state.py` reference host, without copied private state | `script-checked` intent semantics, scope/tenure, Nexus authority, hypothesis/outcome history, proposal/revision chains, concurrency, receipt and recovery semantics; automatic host retrieval remains `host-required` | Proposal-intent negative controls, adapter failure-injection tests, and longitudinal evals |
 | `tools/{start,write,close}-trace.ps1`, `run-workflow.ps1`, `check-trace-coverage.ps1` | Local trace lifecycle and runner | `host-owned` | Embedded host contract only | `host-required` | Current host receipt |
 | `tools/redact-trace-event.ps1`, `check-redaction-fixtures.ps1` | Regex redactor with limited pattern coverage | `drop-with-reason` | Conservative publication scan in `quick_validate.py` | `deterministic-script` | Scan tracked and untracked target candidates |
 | `tools/check-live-validation-readiness.ps1` | Checks status-document tokens; does not execute a live eval | `drop-with-reason` | `docs/release-checklist.md` with actual-result placeholders | `host-required` | Exact host eval receipt |
@@ -122,8 +122,16 @@ no selected software license and must not be described as open source.
 
 ## Target boundary
 
-The target skill owns product-decision instructions, references, templates,
-static package checks, and eval definitions. It does not own Robin identity,
-durable memory, connector access, permissions, external writes, schedules,
-traces, retries, receipts, or publication. Those capabilities remain with the
-active host and require current host evidence.
+The target skill owns product-decision instructions, state contracts,
+references, templates, static checks, eval definitions, and an optional
+reference file-host implementation. It does not own Robin identity, a selected
+durable store, persisted private records, connector access, permissions,
+external writes, schedules, traces, or publication. The reference adapter may
+issue local persistence receipts only when explicitly invoked against a
+user-selected absolute root outside the package on a single-host local
+filesystem. Its accepted receipt proves exact readback for the atomic-replace
+protocol. Its revision chain binds accepted state changes, while its
+proposal-attempt chain also preserves rejected and conflicting receipts.
+Power-loss durability, owner/receipt authenticity, and an external integrity
+anchor remain host-owned. Other capabilities remain with the active host and
+require current host evidence.

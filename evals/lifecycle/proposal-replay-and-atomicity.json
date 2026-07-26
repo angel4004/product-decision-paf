@@ -1,0 +1,72 @@
+{
+  "id": "proposal-replay-and-atomicity",
+  "mode": "standalone",
+  "hypothesis_id": "hypothesis-atomicity",
+  "turns": [
+    {
+      "turn_id": "exact-replay",
+      "fresh_context": true,
+      "input": "The same change-set ID and exact content are submitted again after an accepted receipt.",
+      "host_state": {
+        "workspace_revision": 4,
+        "receipt_status": "accepted",
+        "change_set_hash_match": true
+      },
+      "expected": [
+        "Return the exact immutable prior receipt.",
+        "Do not create another state revision."
+      ],
+      "forbidden": [
+        "duplicate the state update",
+        "issue a different accepted receipt"
+      ]
+    },
+    {
+      "turn_id": "id-reuse-with-different-content",
+      "fresh_context": true,
+      "input": "The same change-set ID is submitted with different candidate content.",
+      "host_state": {
+        "workspace_revision": 4,
+        "receipt_status": "accepted",
+        "change_set_hash_match": false
+      },
+      "expected": [
+        "Fail closed on the ID collision.",
+        "Leave state history unchanged."
+      ],
+      "forbidden": [
+        "return the old receipt as proof for the new content",
+        "overwrite revision 4"
+      ]
+    },
+    {
+      "turn_id": "interrupted-write",
+      "fresh_context": true,
+      "input": "The atomic bundle replacement fails before commit.",
+      "host_state": {
+        "workspace_revision": 4,
+        "receipt_status": "failed",
+        "bundle_write_completed": false
+      },
+      "expected": [
+        "Keep the previous bundle authoritative and byte-for-byte intact.",
+        "Do not claim that either the new state or its receipt persisted."
+      ],
+      "forbidden": [
+        "partial state accepted",
+        "persisted"
+      ]
+    }
+  ],
+  "expected_invariants": [
+    "Exact replay is idempotent and content-bound.",
+    "A change-set ID cannot authorize different content.",
+    "State, receipt, and handled proposal binding commit as one atomic bundle."
+  ],
+  "source_refs": [
+    "references/hypothesis-state-and-persistence.md",
+    "assets/hypothesis-state-bundle.schema.json",
+    "assets/persistence-receipt.schema.json",
+    "scripts/hypothesis_state.py"
+  ]
+}

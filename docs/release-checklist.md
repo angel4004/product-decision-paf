@@ -1,334 +1,184 @@
 # Release checklist
 
-## Release posture
+## Release scope
 
-Portability mode: **Cross-platform**.
+- Repository: `angel4004/product-decision-paf`.
+- Branch: `main`.
+- Portability mode: cross-platform Agent Skill.
+- Publication method: reviewed non-force push.
+- Package boundary: portable method, schemas, reference file adapter, tests,
+  eval definitions, and public-safe documentation only.
+- Host boundary: identity, authentication, connectors, private state,
+  permissions, backups, delivery, and external outcome receipts remain outside
+  the package.
 
-Use Python for portable package validation. Do not include PowerShell-only
-runtime assumptions, Codex workspace hooks, local memory, traces, scheduler
-state, private receipts, or source-project automation in the standalone skill.
+The repository is public but has no package-level software license. Do not call
+it open source or infer reuse rights for unlicensed portions. PAF-derived
+material and the Bayram-informed synthesis are attributed and bounded in
+`NOTICE.md` and the architecture reference.
 
-This checklist starts with every execution-dependent gate unverified. Replace a
-placeholder only after running the exact command and recording a safe result.
-`implemented` documentation and `eval-defined` cases are not release passes.
+## Architecture decisions
 
-## Human decisions and boundaries
+- [x] The skill owns PAF hypothesis semantics and the Nexus content model.
+- [x] The skill does not own hidden product memory or a private default store.
+- [x] Longitudinal work uses versioned workspace state, immutable hypothesis
+  revisions, append-only evidence/Nexus/claim/outcome logs, change sets, and
+  persistence receipts.
+- [x] Standalone mode may use the explicit file adapter only at a user-selected
+  absolute state root outside the package.
+- [x] Robin is an optional host adapter, not a package dependency.
+- [x] If all product/state bindings are known but no usable adapter exists, the
+  skill returns the complete change set with `not_persisted`.
+- [x] If a schema-required binding is unknown, the skill returns a separate
+  schema-valid proposal intent with `commit_eligible = false`; it never calls
+  the partial artifact a change set.
+- [x] PAF uses exactly four hypothesis classes: customer need, value
+  proposition, solution, and business model. Lifecycle contexts and external
+  impact are modeled separately.
+- [x] Owner approval, execution evidence, persistence, and external outcomes
+  remain distinct proof types.
 
-- [x] **PAF terminology:** current user direction and primary sources select
-  Product Architecture Framework for hypothesis work.
-- [x] **Architecture claim:** label the skill architecture Bayram-informed
-  synthesis; do not claim the exact matrix is a verbatim Bayram publication or
-  that Bayram authored PAF.
-- [x] **Source reuse:** do not copy unlicensed source-repo text; original target
-  wording only. Attribute the official PAF-derived summaries in `NOTICE.md`.
-- [x] **Implicit activation:** use `allow_implicit_invocation: false`.
-- [x] **Public visibility:** the named target already exists as a public empty
-  repository and the goal explicitly requires publication there.
+## Local validation evidence
 
-No software license is selected for the original package. Publication is
-allowed, but the repository must not be described as open source or as granting
-reuse rights for the unlicensed portions.
-
-## Package validation
-
-Run from the target repository root:
-
-```text
-python scripts/quick_validate.py
-```
-
-The validator must check at least:
-
-- `SKILL.md` exists and its frontmatter contains only the approved `name` and
-  `description`;
-- the skill name is `product-decision-paf`;
-- `agents/openai.yaml` exists and references `$product-decision-paf`;
-- every runtime reference and asset is linked directly from `SKILL.md`;
-- migration and critical-behavior coverage documents exist;
-- positive and negative eval cases cover the required case IDs;
-- forbidden claim classes are represented;
-- no private memory, trace, credential, transcript, receipt, or source-product
-  artifact was copied;
-- no obvious secret-looking strings or local-user absolute paths exist;
-- no required file is a placeholder;
-- Markdown links resolve.
-
-Record the actual result:
+Run from the repository root:
 
 ```text
-command: python scripts/quick_validate.py
-status: PASS on published commit
-exit_code: 0
-checks_run: 9
-eval_cases: 37
-checked_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-companion_checks: official skill validator PASS; validator unit tests 4/4 PASS;
-  GitHub Actions matrix 4/4 PASS
-safe_output_ref: https://github.com/angel4004/product-decision-paf/actions/runs/30199709600
-```
-
-The command establishes package integrity only. It does not prove model
-behavior, methodology correctness, live source access, approvals, or product
-impact.
-
-## Repository checks
-
-```text
-git rev-parse --show-toplevel
-git remote -v
-git status --short --branch
+python scripts/quick_validate.py --root .
+python -m unittest discover -s tests -v
+python "$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py" .
+python -m py_compile scripts/hypothesis_state.py scripts/quick_validate.py tests/test_hypothesis_state.py tests/test_quick_validate.py
 git diff --check
-git ls-files
 ```
 
-Record:
+Candidate results on 2026-07-26:
 
 ```text
-repository_root: separate target checkout
-origin: angel4004/product-decision-paf
-branch: main
-working_tree: clean at checked commit
+package_validator: PASS
+checks_run: 12
+eval_cases: 50
+lifecycle_scenarios: 11
+unit_tests: 115/115 PASS
+dependency_free_ci_simulation: 115 tests PASS; 3 optional jsonschema checks skipped
+optional_jsonschema_local_differential: PASS
+official_skill_validator: PASS
+python_compile: PASS
 diff_check: PASS
-tracked_file_review: PASS; only target package files
+strict_json_duplicate_and_nonfinite_scan: PASS
 ```
 
-Confirm manually:
+These checks establish package structure, schemas, deterministic adapter
+semantics, and documented eval coverage. They do not prove production host
+behavior, authenticated owner identity, storage durability beyond the
+documented scope, or business impact.
 
-- [x] Source and target are separate Git repositories.
-- [x] No unrelated user changes are included.
-- [x] No `memory/local`, `traces`, `.env*`, raw transcripts, credentials,
-  sessions, private receipts, or generated runtime state is tracked.
-- [x] No source-client-specific product or recovery rule leaked into the
-  generic skill.
-- [x] No source file was recursively copied without classification.
+## Behavioral evidence
 
-## Secret and privacy scan
-
-First run the package validator. Then run an available trusted secret scanner
-against both tracked files and the complete candidate working tree. Record the
-exact tool and version; do not paste detected secret values into a report.
+The targeted longitudinal evaluation used isolated rubric-withheld turn
+generators and an independent semantic grader. Release audit later applied the
+actual artifact schemas and withdrew the former aggregate remediation pass:
 
 ```text
-primary_command: python scripts/quick_validate.py
-secondary_scanner: NOT-AVAILABLE (gitleaks, trufflehog, detect-secrets absent)
-scanner_version: NOT-AVAILABLE
-tracked_files_result: PASS built-in scan over the staged candidate
-working_tree_result: PASS built-in secret/path/privacy scan plus targeted rg review
-false_positives_reviewed_by: primary release agent
+baseline: 21/27 turns; 5/11 scenarios fully passing
+baseline_failures: 6
+remediation_semantic_review: 6/6 described intended rules
+former_effective_27_of_27: WITHDRAWN
+model_emitted_full_transaction_conformance: NOT_ESTABLISHED
+proposal_intent_conformance: 1 positive plus 7 negative controls PASS
+focused_model_no_store_intent: current nested artifact PASS; predecessor rejected
+runtime: Codex fresh-context subagents; exact build not exposed
+report: docs/longitudinal-forward-eval-report.md
 ```
 
-Any real credential, private content, raw trace, or unexplained secret-like
-literal blocks release. Synthetic secret fixtures should be generated at test
-runtime rather than committed.
+The complete 50-case host harness was not executed. The baseline is
+`instruction-supported`, not a production runtime receipt. Raw baseline and
+rerun outputs remain Git-ignored and unpublished.
 
-## Eval inventory and behavior runs
+## Secret, privacy, and package-boundary scan
 
-Required positive activation coverage:
+- [x] The package validator scanned the complete candidate for selected secret,
+  credential, private-path, trace, receipt, and copied-memory hazards.
+- [x] Strict JSON parsing covered package and ignored eval JSON without printing
+  private payloads.
+- [x] `evals/results/` and `evals/results-rerun/` are ignored.
+- [x] CI remote actions use full commit SHAs, checkout does not persist
+  credentials, and validation CI performs no network dependency installation.
+- [x] No `.env*`, credential, session, raw transcript, private memory, runtime
+  receipt, or generated host state is tracked.
+- [x] Targeted review found no source-client-specific product state.
+- [ ] Secondary secret scanner: unavailable locally (`gitleaks` was not
+  installed). The built-in scan is not a complete secret-history audit.
 
-- [x] product hypothesis review;
-- [x] PAF review;
-- [x] PMF/PCF evidence question;
-- [x] explicit product passport;
-- [x] next product step;
-- [x] claims in an artifact;
-- [x] CPO/founder decision argumentation.
+## Repository and publication preflight
 
-Required negative activation coverage:
-
-- [x] ordinary coding;
-- [x] become Robin/root agent;
-- [x] persist personal memory;
-- [x] unapproved external write;
-- [x] generic landing/visual production without a product decision;
-- [x] financial, legal, and medical advice.
-
-Required behavior coverage:
-
-- [x] all twelve quality-critical invariants;
-- [x] PMF, PCF, business impact, customer success, user need, metric uplift,
-  readiness, and PAF consistency claim boundaries;
-- [x] source routing before asking for more data;
-- [x] standalone and embedded boundaries;
-- [x] privacy/publication;
-- [x] realistic product passport;
-- [x] disputed PMF/PCF;
-- [x] insufficient and contradictory evidence;
-- [x] one default next step with a pass/fail rule.
-- [x] null-base and data-base routing;
-- [x] customer/need, value proposition, solution, and business-model hypothesis
-  classification;
-- [x] upstream dependency and the value-plus-solution co-test exception;
-- [x] Hypothesis Card completeness;
-- [x] Understand–Identify–Execute and knowledge return to the Nexus;
-- [x] no fabricated Confidence Point or composite PAF score.
-
-Static eval inventory:
+Read-only preflight on 2026-07-26:
 
 ```text
-command: python scripts/quick_validate.py
-status: PASS
-case_count: 37
-required_case_ids: 37/37
-quality_critical_invariants: 12/12 mapped
-missing_case_ids: none
-```
-
-Behavior execution requires an independent model or host harness:
-
-```text
-command: seven independent fresh-context forward reviews
-status: TARGETED PASS; COMPLETE 37-CASE HARNESS NOT RUN
-model_runtime: Codex subagents; exact build not exposed
-skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-cases_run: 7
-passed: 7
-failed: 0
-blocked: 0
-safe_report_ref: current goal execution record; no raw private input persisted
-```
-
-Do not use `<HOST_EVAL_COMMAND>` literally. If no harness exists, record
-`host-required` and keep behavior unverified.
-
-## Standalone forward test
-
-Run the packaged skill in a fresh context without source-repo instructions or
-the intended answers. Include at least:
-
-1. a realistic existing-product decision;
-2. a new-product request where a passport was not requested;
-3. a disputed PMF/PCF claim;
-4. an insufficient-evidence case;
-5. an ordinary coding negative control.
-
-Record:
-
-```text
-command_or_thread_refs: five fresh standalone subagent runs
-status: PASS for required targeted scenarios
-skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-context_leakage_check: PASS; agents received package path and bounded prompt only
-reviewer: independent Codex subagents plus primary release agent
-findings: null-base, data-base, value/solution co-test, insufficient evidence,
-  and coding/memory negative behavior passed; first runs exposed unlabeled
-  thresholds, then the patched skill and regression case passed reruns
-```
-
-Success requires transferable behavior from the skill package, not leaked
-source context.
-
-## Robin embedded test
-
-Robin must remain the root agent and supply only bounded task context. The test
-must show:
-
-- [ ] Robin owns identity, user profile, memory, permissions, tools, approvals,
-  delivery, and receipts;
-- [ ] the skill receives bounded `task`, `goal_context`, `source_evidence`,
-  `constraints`, `runtime_evidence`, and `language`;
-- [ ] the skill returns the documented structured product-decision result;
-- [ ] the skill does not write memory, broaden source scope, call unapproved
-  tools, send, publish, schedule, commit, or deploy;
-- [ ] missing host evidence returns `host-required`.
-
-Record:
-
-```text
-command: one bounded-context Robin capability forward review
-status: TARGETED OUTPUT PASS; HOST ENFORCEMENT STILL REQUIRED
-robin_commit_or_version: not applicable to isolated capability test
-skill_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-cases_run: 1
-safe_receipt_ref: current goal execution record; no private payload persisted
-```
-
-## External outcome boundary
-
-A well-formed review, passport, or recommendation is not proof of product value.
-Before claiming an external outcome, require:
-
-- observable product or user change;
-- baseline or comparison;
-- metric definition, period, denominator, and exclusions;
-- attribution limits;
-- source or receipt owned by the host.
-
-If unavailable, record `external_outcome: NOT VERIFIED`.
-
-## GitHub pre-publication check
-
-Read-only inspection:
-
-```text
-gh repo view angel4004/product-decision-paf --json nameWithOwner,url,visibility,defaultBranchRef
-git remote -v
-git status --short --branch
-```
-
-Record:
-
-```text
-github_repo_exists: yes
-visibility: public
+remote: https://github.com/angel4004/product-decision-paf.git
+visibility: PUBLIC
 default_branch: main
-remote_history_reviewed: yes; no heads returned and repository size was 0
-divergence_reviewed: yes; no remote history to reconcile
-published_commit: f584cf1b6ba092a27f273b1134c79d7fd5816b5f
-remote_readback: PASS
-ci_matrix: PASS on Windows and Ubuntu, Python 3.11 and 3.13
+local_head_before_release: 0d7487cc3673b5f007cc0122522d06305c65ac9e
+origin_main_before_release: 0d7487cc3673b5f007cc0122522d06305c65ac9e
+divergence_before_release: 0 ahead / 0 behind
+force_push: prohibited
 ```
 
-Before publication:
-
-- [x] Fetch and review remote history using an approved network operation.
-- [x] Reconcile existing commits; do not blind `git init`.
-- [x] Do not force push.
-- [x] Review the exact staged diff and commit scope.
-- [x] Treat the explicit goal to publish this exact repository as publication
-  authorization within the stated non-force scope.
-
-## Release evidence record
-
-Populate this table with actual results. Initial values deliberately do not
-claim success.
-
-| Gate | Required evidence | Current result |
-|---|---|---|
-| Package structure/frontmatter | `quick_validate.py` command, exit code, commit | `PASS ON f584cf1; CI 4/4` |
-| Reference/link integrity | Validator output | `PASS` |
-| Eval inventory | Case count and missing IDs | `PASS: 37 IDs; 12 invariant mappings` |
-| Validator failure controls | Unit tests | `PASS: 4/4` |
-| Behavior evals | Harness, runtime, commit, case report | `7 TARGETED PASS; FULL HARNESS NOT RUN` |
-| Standalone forward test | Fresh-context refs and reviewer | `PASS: 5 TARGETED SCENARIOS` |
-| Robin embedded mode | Host receipt | `OUTPUT PASS; HOST ENFORCEMENT REQUIRED` |
-| Secret/privacy scan | Exact scanner commands and safe summary | `BUILT-IN PASS; SECONDARY NOT AVAILABLE` |
-| PAF terminology/provenance | Human decision and primary-source refs | `RESOLVED AND ATTRIBUTED` |
-| Source reuse/license | Human rights/licensing decision | `ORIGINAL WORDING; PARTIAL CC BY-SA; NO PACKAGE LICENSE` |
-| External outcome | Metric/receipt with attribution | `NOT VERIFIED` |
-| Git remote/history | Git/GitHub readback | `PASS: INITIAL PUBLIC MAIN WAS EMPTY` |
-| Commit/push | Commit SHA and remote readback | `PUBLISHED: f584cf1; READBACK PASS` |
-
-## Publication and readback
-
-Only after every release-blocking row is resolved:
+Candidate publication status:
 
 ```text
-git add <reviewed-target-files>
-git commit -m "<reviewed-message>"
-git push origin <reviewed-branch>
-gh repo view angel4004/product-decision-paf --json url,visibility,defaultBranchRef
+implementation_commit: not_created_yet
+implementation_push: pending
+implementation_ci: pending
+release_evidence_commit: pending
+final_remote_readback: pending
 ```
 
-These are release instructions, not standing authorization. Use the active
-host's approval boundary.
+These are live release gates, not placeholders for a success claim. Replace
+them only with exact commit SHAs, GitHub Actions results, and remote readback
+after each operation succeeds.
 
-Final handoff must include:
+## Release gates
 
-- repository URL and published commit SHA;
-- portability mode;
-- exact validator and eval results;
-- privacy/secret scan result;
-- terminology/provenance and license decisions;
-- source functions retained, adapted, host-owned, and dropped;
-- known standalone and embedded gaps;
-- standalone usage and Robin embedded invocation guidance.
+| Gate | Current result |
+|---|---|
+| Skill frontmatter and package structure | PASS |
+| Runtime references and Markdown links | PASS |
+| Four PAF classes and dependency/co-test semantics | PASS |
+| Workspace/proposal-intent/change-set/receipt/bundle schemas | PASS |
+| Unit suite: validator plus file adapter | PASS, 115/115 |
+| Static eval inventory | PASS, 50 cases |
+| Lifecycle inventory | PASS, 11 scenarios |
+| Targeted longitudinal behavior | PARTIAL, baseline 21/27; former effective 27/27 withdrawn |
+| Standalone no-store artifact contract | PASS deterministic fixture, 7 negative controls, and one focused nested model intent; full model transaction run not established |
+| Robin failed-store boundary | PASS in targeted baseline |
+| Secret/privacy built-in scan | PASS |
+| Secondary secret scanner | NOT AVAILABLE |
+| External product outcome | NOT VERIFIED |
+| Production Robin persistence adapter | HOST-REQUIRED; not runtime-tested here |
+| Implementation commit and non-force push | PENDING |
+| Cross-platform GitHub Actions matrix | PENDING |
+| Final remote commit/tree readback | PENDING |
+
+## Publication procedure
+
+1. Review the exact tracked candidate and confirm ignored raw eval outputs are
+   absent from the index.
+2. Fetch `origin/main` and fail closed on divergence.
+3. Create the implementation commit and push `main` without force.
+4. Wait for the exact GitHub Actions run and require every matrix job to pass.
+5. Record the implementation SHA, workflow URL, job matrix, and remote
+   readback in this file.
+6. Commit that release evidence, push without force, wait for its exact workflow
+   run, and perform final remote readback.
+7. Report external outcome as not verified unless a separate host-owned metric
+   and attribution receipt exists.
+
+## Final handoff requirements
+
+- repository URL, final commit SHA, and exact CI result;
+- standalone and Robin embedded usage boundary;
+- local validator, unit-test, and targeted behavior counts;
+- secret/privacy scan scope and unavailable secondary scanner;
+- explicit statement that the package has no hidden memory;
+- explicit statement that durable continuity works through host-owned state and
+  accepted receipts;
+- remaining host/runtime and external-outcome gaps.

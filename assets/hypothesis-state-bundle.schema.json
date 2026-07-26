@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/angel4004/product-decision-paf/schemas/hypothesis-state-bundle.schema.json",
+  "title": "Product Decision PAF Atomic State Bundle",
+  "description": "Single-file authoritative current state plus a linear revision ledger, immutable hypothesis revisions, handled proposal hashes, and receipts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_policy",
+    "workspace_id",
+    "proposal_history_head_sha256",
+    "current_state",
+    "revision_history",
+    "hypothesis_history",
+    "receipts",
+    "handled_proposals"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "product-decision-paf/hypothesis-state-bundle/v1"
+    },
+    "data_policy": {
+      "const": "safe_refs_and_summaries_only"
+    },
+    "workspace_id": {
+      "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+    },
+    "proposal_history_head_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "current_state": {
+      "anyOf": [
+        {
+          "$ref": "hypothesis-workspace-state.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "revision_history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/revisionRecord"
+      }
+    },
+    "hypothesis_history": {
+      "type": "array",
+      "items": {
+        "$ref": "hypothesis-workspace-state.schema.json#/$defs/hypothesisRecord"
+      }
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "$ref": "persistence-receipt.schema.json"
+      }
+    },
+    "handled_proposals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/handledProposal"
+      }
+    }
+  },
+  "$defs": {
+    "revisionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_revision",
+        "change_set_sha256",
+        "previous_revision_sha256",
+        "previous_state_sha256",
+        "revision_delta_sha256",
+        "revision_sha256",
+        "state_sha256",
+        "receipt_id",
+        "accepted_at",
+        "change_manifest",
+        "state_summary"
+      ],
+      "properties": {
+        "workspace_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "change_set_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "previous_revision_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "previous_state_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revision_delta_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "revision_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "state_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "receipt_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "accepted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "change_manifest": {
+          "$ref": "hypothesis-change-set.schema.json#/$defs/changeManifest"
+        },
+        "state_summary": {
+          "$ref": "#/$defs/stateSummary"
+        }
+      }
+    },
+    "stateSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base",
+        "active_decision_scope_id",
+        "decision_scope_count",
+        "active_owner_tenure_id",
+        "owner_tenure_count",
+        "hypothesis_count",
+        "nexus_entry_count",
+        "evidence_count",
+        "claim_event_count",
+        "outcome_event_count",
+        "active_blocked_claim_count"
+      ],
+      "properties": {
+        "base": {
+          "enum": [
+            "null_base",
+            "data_base"
+          ]
+        },
+        "active_decision_scope_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "decision_scope_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "active_owner_tenure_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "owner_tenure_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "hypothesis_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nexus_entry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "evidence_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "claim_event_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "outcome_event_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "active_blocked_claim_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "handledProposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "change_set_id",
+        "change_set_sha256",
+        "receipt_id",
+        "previous_proposal_sha256",
+        "receipt_sha256",
+        "proposal_sha256"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "change_set_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "change_set_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "receipt_id": {
+          "$ref": "hypothesis-workspace-state.schema.json#/$defs/stableId"
+        },
+        "previous_proposal_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "proposal_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

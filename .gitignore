@@ -14,6 +14,7 @@ build/
 dist/
 *.egg-info/
 evals/results/
+evals/results-rerun/
 coverage/
 
 # Local host state and private runtime artifacts
